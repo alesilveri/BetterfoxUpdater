@@ -17,3 +17,7 @@ error.log
 # OS noise
 .DS_Store
 Thumbs.db
+release_BetterfoxUpdater/
+config.ini
+nuitka-crash-report.xml
+resources/betterfox.ico
