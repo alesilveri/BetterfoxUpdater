@@ -67,7 +67,9 @@ class Settings:
             if section not in self.cfg:
                 self.cfg[section] = {}
             for key, value in defaults.items():
-                self.cfg[section].setdefault(key, value)
+                cur = self.cfg[section].get(key, "")
+                if cur is None or str(cur).strip() == "":
+                    self.cfg[section][key] = value
         if not self.cfg["Settings"].get("backup_folder"):
             self.cfg["Settings"]["backup_folder"] = str(paths.base / "backups")
         self.save()

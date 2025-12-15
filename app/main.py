@@ -62,7 +62,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.svc = svc
         self.settings = settings
         self.paths = paths
-        self.accent = "#4F8CF5"
+        self.accent = "#5B8CFF"
         self.sig = self.Signals()
         self.sig.log.connect(self._append_log)
         self.sig.status.connect(self._set_status)
@@ -152,6 +152,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.check_btn.clicked.connect(self.check_versions)
         self.update_btn = QtWidgets.QPushButton("Aggiorna")
         self.update_btn.clicked.connect(self.run_update)
+        self.update_btn.setProperty("class", "primary")
         self.backup_btn = QtWidgets.QPushButton("Solo backup")
         self.backup_btn.clicked.connect(self.run_backup)
         actions.addWidget(self.check_btn)
@@ -212,6 +213,7 @@ class MainWindow(QtWidgets.QMainWindow):
         net_layout.addWidget(QtWidgets.QLabel("Tentativi"), 2, 0)
         net_layout.addWidget(self.retries_spin, 2, 1)
         self.apply_net_btn = QtWidgets.QPushButton("Applica rete")
+        self.apply_net_btn.setProperty("class", "primary")
         self.apply_net_btn.clicked.connect(self.apply_network_settings)
         self.test_net_btn = QtWidgets.QPushButton("Test download")
         self.test_net_btn.clicked.connect(self.test_network)
@@ -272,43 +274,85 @@ class MainWindow(QtWidgets.QMainWindow):
     def _apply_stylesheet(self):
         self.setStyleSheet(
             f"""
+            QWidget {{
+                background-color: #0b1220;
+                color: #e7eaf2;
+                font-family: "Segoe UI", "Segoe UI Variable", "Inter", sans-serif;
+                font-size: 13px;
+            }}
             QGroupBox {{
-                border: 1px solid #404040;
-                border-radius: 8px;
+                border: 1px solid #1f2737;
+                border-radius: 12px;
                 margin-top: 12px;
                 padding-top: 16px;
+                background-color: #0f172a;
             }}
             QGroupBox::title {{
                 subcontrol-origin: margin;
                 left: 12px;
                 padding: 0 4px;
+                color: #9fb3ff;
+                font-weight: 600;
             }}
             QPushButton {{
-                padding: 8px 12px;
-                border-radius: 6px;
+                padding: 9px 14px;
+                border-radius: 10px;
+                border: 1px solid #1f2737;
+                background-color: #121a2b;
+                color: #e7eaf2;
             }}
             QPushButton:hover {{
-                background-color: rgba(79,140,245,0.12);
+                border-color: rgba(91,140,255,0.6);
+                background-color: rgba(91,140,255,0.12);
+            }}
+            QPushButton[class="primary"] {{
+                background-color: {self.accent};
+                color: #0b1220;
+                border: none;
+                font-weight: 600;
+            }}
+            QPushButton[class="primary"]:hover {{
+                background-color: #6b9cff;
             }}
             QLineEdit, QComboBox, QSpinBox {{
-                padding: 6px;
+                padding: 8px 10px;
+                border-radius: 10px;
+                border: 1px solid #1f2737;
+                background-color: #0f1627;
+                selection-background-color: {self.accent};
+                selection-color: #0b1220;
             }}
             QPlainTextEdit {{
-                background-color: #0f0f0f;
-                color: #f2f2f2;
-                border-radius: 6px;
-                border: 1px solid #2f2f2f;
+                background-color: #0a101d;
+                color: #e7eaf2;
+                border-radius: 12px;
+                border: 1px solid #1f2737;
+                padding: 8px;
             }}
             #heroCard {{
-                background-color: rgba(79,140,245,0.08);
-                border: 1px solid rgba(79,140,245,0.25);
-                border-radius: 10px;
-                padding: 12px;
+                background: qlineargradient(x1:0, y1:0, x2:1, y2:1,
+                    stop:0 rgba(91,140,255,0.18),
+                    stop:1 rgba(16,24,40,0.95));
+                border: 1px solid rgba(91,140,255,0.35);
+                border-radius: 14px;
+                padding: 16px;
             }}
             #statusChip {{
-                padding: 6px 10px;
+                padding: 6px 12px;
+                border-radius: 10px;
+                background-color: rgba(91,140,255,0.12);
+                color: #e7eaf2;
+                font-weight: 600;
+            }}
+            QProgressBar {{
+                border: 1px solid #1f2737;
                 border-radius: 8px;
-                background-color: rgba(79,140,245,0.12);
+                background: #0f1627;
+                text-align: center;
+            }}
+            QProgressBar::chunk {{
+                background-color: {self.accent};
+                border-radius: 8px;
             }}
             """
         )
@@ -342,7 +386,10 @@ class MainWindow(QtWidgets.QMainWindow):
     def _load_settings(self):
         self.profile_edit.setText(self.settings.get("profile_path", ""))
         self.backup_edit.setText(self.settings.get("backup_folder", ""))
-        self.retention_spin.setValue(int(self.settings.get("retention_days", "60")))
+        try:
+            self.retention_spin.setValue(int(self.settings.get("retention_days", "60") or "60"))
+        except Exception:
+            self.retention_spin.setValue(60)
         self.compress_chk.setChecked(self.settings.get("compress_backup", "yes") == "yes")
         self.auto_backup_chk.setChecked(self.settings.get("auto_backup", "yes") == "yes")
         self.auto_restart_chk.setChecked(self.settings.get("auto_restart", "yes") == "yes")
@@ -630,7 +677,11 @@ def main():
             sys.exit(0)
         if not args.no_backup and bk:
             svc.close_firefox()
-            svc.backup_profile(prof, bk, True, int(settings.get("retention_days", "60")), print)
+            try:
+                retention = int(settings.get("retention_days", "60") or "60")
+            except Exception:
+                retention = 60
+            svc.backup_profile(prof, bk, True, retention, print)
         svc.close_firefox()
         (prof / "user.js").write_text(content, "utf-8")
         print(f"Aggiornato a {rv}")
