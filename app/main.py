@@ -79,6 +79,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self._bind_settings()
         self._load_profiles()
         self._build_tray()
+        self._toggle_advanced(False)
 
     def _build_ui(self):
         cw = QtWidgets.QWidget()
@@ -119,6 +120,14 @@ class MainWindow(QtWidgets.QMainWindow):
         hero_actions.addWidget(changelog_btn)
         hero_layout.addLayout(hero_actions)
         layout.addWidget(hero)
+
+        # Toggle avanzate
+        toggle_row = QtWidgets.QHBoxLayout()
+        self.advanced_toggle = QtWidgets.QCheckBox("Mostra opzioni avanzate")
+        self.advanced_toggle.stateChanged.connect(lambda _: self._toggle_advanced(self.advanced_toggle.isChecked()))
+        toggle_row.addWidget(self.advanced_toggle)
+        toggle_row.addStretch()
+        layout.addLayout(toggle_row)
 
         # Profile area
         profile_box = QtWidgets.QGroupBox("Profilo Firefox")
@@ -220,6 +229,7 @@ class MainWindow(QtWidgets.QMainWindow):
         net_layout.addWidget(self.apply_net_btn, 3, 0)
         net_layout.addWidget(self.test_net_btn, 3, 1)
         layout.addWidget(network_box)
+        self.network_box = network_box
 
         # Log area
         self.log_text = QtWidgets.QPlainTextEdit()
@@ -240,13 +250,25 @@ class MainWindow(QtWidgets.QMainWindow):
         self._set_status("Pronto")
 
         # Utility buttons
-        util_layout = QtWidgets.QHBoxLayout()
+        basic_util = QtWidgets.QHBoxLayout()
         open_log_btn = QtWidgets.QPushButton("Apri log")
         open_log_btn.clicked.connect(lambda: self._open_path(self.paths.log_file))
-        open_cfg_btn = QtWidgets.QPushButton("Apri config")
-        open_cfg_btn.clicked.connect(lambda: self._open_path(self.paths.config))
         open_backup_btn = QtWidgets.QPushButton("Apri cartella backup")
         open_backup_btn.clicked.connect(self._open_backup_dir)
+        clear_log_btn = QtWidgets.QPushButton("Pulisci log")
+        clear_log_btn.clicked.connect(self.log_text.clear)
+        about_btn = QtWidgets.QPushButton("About")
+        about_btn.clicked.connect(self._show_about)
+        basic_util.addWidget(open_log_btn)
+        basic_util.addWidget(open_backup_btn)
+        basic_util.addWidget(clear_log_btn)
+        basic_util.addWidget(about_btn)
+        basic_util.addStretch()
+        layout.addLayout(basic_util)
+
+        adv_util_box = QtWidgets.QHBoxLayout()
+        open_cfg_btn = QtWidgets.QPushButton("Apri config")
+        open_cfg_btn.clicked.connect(lambda: self._open_path(self.paths.config))
         open_data_btn = QtWidgets.QPushButton("Cartella dati app")
         open_data_btn.clicked.connect(lambda: self._open_path(self.paths.base))
         release_btn = QtWidgets.QPushButton("Cartella release")
@@ -255,21 +277,16 @@ class MainWindow(QtWidgets.QMainWindow):
         open_profile_btn.clicked.connect(self._open_profile_dir)
         open_userjs_btn = QtWidgets.QPushButton("Apri user.js")
         open_userjs_btn.clicked.connect(self._open_userjs)
-        clear_log_btn = QtWidgets.QPushButton("Pulisci log")
-        clear_log_btn.clicked.connect(self.log_text.clear)
-        about_btn = QtWidgets.QPushButton("About")
-        about_btn.clicked.connect(self._show_about)
-        util_layout.addWidget(open_log_btn)
-        util_layout.addWidget(open_cfg_btn)
-        util_layout.addWidget(open_backup_btn)
-        util_layout.addWidget(open_data_btn)
-        util_layout.addWidget(release_btn)
-        util_layout.addWidget(open_profile_btn)
-        util_layout.addWidget(open_userjs_btn)
-        util_layout.addWidget(clear_log_btn)
-        util_layout.addWidget(about_btn)
-        util_layout.addStretch()
-        layout.addLayout(util_layout)
+        adv_util_box.addWidget(open_cfg_btn)
+        adv_util_box.addWidget(open_data_btn)
+        adv_util_box.addWidget(release_btn)
+        adv_util_box.addWidget(open_profile_btn)
+        adv_util_box.addWidget(open_userjs_btn)
+        adv_util_box.addStretch()
+        adv_container = QtWidgets.QWidget()
+        adv_container.setLayout(adv_util_box)
+        layout.addWidget(adv_container)
+        self.advanced_container = adv_container
 
     def _apply_stylesheet(self):
         self.setStyleSheet(
@@ -382,6 +399,8 @@ class MainWindow(QtWidgets.QMainWindow):
         else:
             palette = QtWidgets.QApplication.style().standardPalette()
         QtWidgets.QApplication.instance().setPalette(palette)
+        # nascondi avanzate di default alla partenza per vista compatta
+        self._toggle_advanced(self.advanced_toggle.isChecked())
 
     def _load_settings(self):
         self.profile_edit.setText(self.settings.get("profile_path", ""))
@@ -513,6 +532,14 @@ class MainWindow(QtWidgets.QMainWindow):
                 subprocess.Popen(["open", str(path)])
             else:
                 subprocess.Popen(["xdg-open", str(path)])
+
+    def _toggle_advanced(self, visible: bool):
+        if hasattr(self, "advanced_container"):
+            self.advanced_container.setVisible(visible)
+        if hasattr(self, "network_box"):
+            self.network_box.setVisible(visible)
+        label = "Mostra opzioni avanzate" if not visible else "Nascondi opzioni avanzate"
+        self.advanced_toggle.setText(label)
 
     def _show_about(self):
         text = (
