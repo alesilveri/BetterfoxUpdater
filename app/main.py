@@ -85,81 +85,118 @@ class MainWindow(QtWidgets.QMainWindow):
         cw = QtWidgets.QWidget()
         self.setCentralWidget(cw)
         layout = QtWidgets.QVBoxLayout(cw)
-        layout.setContentsMargins(14, 10, 14, 10)
-        layout.setSpacing(6)
+        layout.setContentsMargins(16, 12, 16, 12)
+        layout.setSpacing(10)
+
+        style = self.style()
 
         header = QtWidgets.QHBoxLayout()
         title = QtWidgets.QLabel("Betterfox Updater")
-        title.setStyleSheet("font-size:16px; font-weight:600;")
-        subtitle = QtWidgets.QLabel("Compatto, backup e update rapidi")
+        title.setStyleSheet("font-size:18px; font-weight:700;")
+        subtitle = QtWidgets.QLabel("Aggiorna user.js con backup sicuri e controlli rapidi.")
         subtitle.setStyleSheet("color:#9fb3c8;")
         header_text = QtWidgets.QVBoxLayout()
         header_text.addWidget(title)
         header_text.addWidget(subtitle)
         header.addLayout(header_text)
         header.addStretch()
+        self.status = QtWidgets.QLabel("Pronto")
+        self.status.setObjectName("statusChip")
+        header.addWidget(self.status)
         layout.addLayout(header)
 
         tabs = QtWidgets.QTabWidget()
 
         base_tab = QtWidgets.QWidget()
         base_layout = QtWidgets.QVBoxLayout(base_tab)
-        base_layout.setSpacing(8)
+        base_layout.setSpacing(10)
 
-        actions_box = QtWidgets.QGroupBox("Aggiornamento")
-        actions_layout = QtWidgets.QGridLayout(actions_box)
-        self.check_btn = QtWidgets.QPushButton("Controlla versioni")
-        self.update_btn = QtWidgets.QPushButton("Aggiorna")
-        self.update_btn.setProperty("class", "primary")
-        self.backup_btn = QtWidgets.QPushButton("Solo backup")
-        self.check_btn.clicked.connect(self.check_versions)
-        self.update_btn.clicked.connect(self.run_update)
-        self.backup_btn.clicked.connect(self.run_backup)
-        actions_layout.addWidget(self.check_btn, 0, 0)
-        actions_layout.addWidget(self.update_btn, 0, 1)
-        actions_layout.addWidget(self.backup_btn, 0, 2)
+        versions_box = QtWidgets.QGroupBox("Versioni e stato")
+        versions_grid = QtWidgets.QGridLayout(versions_box)
+        versions_grid.setVerticalSpacing(6)
         self.local_lbl = QtWidgets.QLabel("n/d")
         self.remote_lbl = QtWidgets.QLabel("n/d")
         self.github_lbl = QtWidgets.QLabel("n/d")
         self.fx_lbl = QtWidgets.QLabel("n/d")
-        actions_layout.addWidget(QtWidgets.QLabel("Locale"), 1, 0)
-        actions_layout.addWidget(QtWidgets.QLabel("Remoto"), 1, 1)
-        actions_layout.addWidget(QtWidgets.QLabel("GitHub"), 1, 2)
-        actions_layout.addWidget(QtWidgets.QLabel("Firefox"), 1, 3)
-        actions_layout.addWidget(self.local_lbl, 2, 0)
-        actions_layout.addWidget(self.remote_lbl, 2, 1)
-        actions_layout.addWidget(self.github_lbl, 2, 2)
-        actions_layout.addWidget(self.fx_lbl, 2, 3)
+        for lbl in (self.local_lbl, self.remote_lbl, self.github_lbl, self.fx_lbl):
+            lbl.setObjectName("pill")
+        versions_grid.addWidget(QtWidgets.QLabel("Locale"), 0, 0)
+        versions_grid.addWidget(QtWidgets.QLabel("Remoto"), 0, 1)
+        versions_grid.addWidget(QtWidgets.QLabel("GitHub"), 0, 2)
+        versions_grid.addWidget(QtWidgets.QLabel("Firefox"), 0, 3)
+        versions_grid.addWidget(self.local_lbl, 1, 0)
+        versions_grid.addWidget(self.remote_lbl, 1, 1)
+        versions_grid.addWidget(self.github_lbl, 1, 2)
+        versions_grid.addWidget(self.fx_lbl, 1, 3)
+        base_layout.addWidget(versions_box)
+
+        actions_box = QtWidgets.QGroupBox("Azioni rapide")
+        actions_layout = QtWidgets.QHBoxLayout(actions_box)
+        actions_layout.setSpacing(12)
+        self.check_btn = QtWidgets.QPushButton("Controlla versioni")
+        self.check_btn.setIcon(style.standardIcon(QtWidgets.QStyle.SP_BrowserReload))
+        self.update_btn = QtWidgets.QPushButton("Aggiorna Betterfox")
+        self.update_btn.setProperty("class", "primary")
+        self.update_btn.setIcon(style.standardIcon(QtWidgets.QStyle.SP_ArrowDown))
+        self.backup_btn = QtWidgets.QPushButton("Backup profilo")
+        self.backup_btn.setIcon(style.standardIcon(QtWidgets.QStyle.SP_DriveHDIcon))
+        self.check_btn.clicked.connect(self.check_versions)
+        self.update_btn.clicked.connect(self.run_update)
+        self.backup_btn.clicked.connect(self.run_backup)
+        actions_layout.addWidget(self.check_btn)
+        actions_layout.addWidget(self.update_btn)
+        actions_layout.addWidget(self.backup_btn)
+        actions_layout.addStretch()
         base_layout.addWidget(actions_box)
 
         paths_box = QtWidgets.QGroupBox("Percorsi")
-        paths_layout = QtWidgets.QGridLayout(paths_box)
-        paths_layout.addWidget(QtWidgets.QLabel("Profilo Firefox"), 0, 0)
+        form = QtWidgets.QFormLayout(paths_box)
+        form.setLabelAlignment(QtCore.Qt.AlignLeft)
+        form.setFormAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
+        form.setHorizontalSpacing(10)
         self.profile_edit = QtWidgets.QLineEdit()
-        paths_layout.addWidget(self.profile_edit, 0, 1)
+        profile_row = QtWidgets.QHBoxLayout()
         browse_btn = QtWidgets.QPushButton("Sfoglia")
+        browse_btn.setIcon(style.standardIcon(QtWidgets.QStyle.SP_DirOpenIcon))
         browse_btn.clicked.connect(self.choose_profile)
-        paths_layout.addWidget(browse_btn, 0, 2)
+        profile_row.addWidget(self.profile_edit, 1)
+        profile_row.addWidget(browse_btn)
+        profile_row.setSpacing(6)
+        profile_wrap = QtWidgets.QWidget()
+        profile_wrap.setLayout(profile_row)
+        form.addRow("Profilo Firefox", profile_wrap)
+
         self.profile_combo = QtWidgets.QComboBox()
         self.profile_combo.currentTextChanged.connect(self._on_profile_selected)
-        paths_layout.addWidget(QtWidgets.QLabel("Profili trovati"), 1, 0)
-        paths_layout.addWidget(self.profile_combo, 1, 1)
         reload_btn = QtWidgets.QPushButton("Rileva")
+        reload_btn.setIcon(style.standardIcon(QtWidgets.QStyle.SP_BrowserReload))
         reload_btn.clicked.connect(self._load_profiles)
-        paths_layout.addWidget(reload_btn, 1, 2)
-        paths_layout.addWidget(QtWidgets.QLabel("Cartella backup"), 2, 0)
+        combo_row = QtWidgets.QHBoxLayout()
+        combo_row.addWidget(self.profile_combo, 1)
+        combo_row.addWidget(reload_btn)
+        combo_wrap = QtWidgets.QWidget()
+        combo_wrap.setLayout(combo_row)
+        form.addRow("Profili trovati", combo_wrap)
+
         self.backup_edit = QtWidgets.QLineEdit()
-        paths_layout.addWidget(self.backup_edit, 2, 1)
         backup_btn = QtWidgets.QPushButton("Scegli")
+        backup_btn.setIcon(style.standardIcon(QtWidgets.QStyle.SP_DialogOpenButton))
         backup_btn.clicked.connect(self.choose_backup)
-        paths_layout.addWidget(backup_btn, 2, 2)
-        paths_layout.addWidget(QtWidgets.QLabel("Retention (giorni)"), 3, 0)
+        backup_row = QtWidgets.QHBoxLayout()
+        backup_row.addWidget(self.backup_edit, 1)
+        backup_row.addWidget(backup_btn)
+        backup_wrap = QtWidgets.QWidget()
+        backup_wrap.setLayout(backup_row)
+        form.addRow("Cartella backup", backup_wrap)
+
         self.retention_spin = QtWidgets.QSpinBox()
         self.retention_spin.setRange(7, 120)
-        paths_layout.addWidget(self.retention_spin, 3, 1)
+        form.addRow("Retention (giorni)", self.retention_spin)
         base_layout.addWidget(paths_box)
 
-        toggles_row = QtWidgets.QHBoxLayout()
+        prefs_box = QtWidgets.QGroupBox("Preferenze")
+        prefs_layout = QtWidgets.QHBoxLayout(prefs_box)
+        prefs_layout.setSpacing(12)
         self.compress_chk = QtWidgets.QCheckBox("Comprimi backup")
         self.auto_backup_chk = QtWidgets.QCheckBox("Backup prima di aggiornare")
         self.auto_restart_chk = QtWidgets.QCheckBox("Riavvia Firefox dopo update")
@@ -167,34 +204,41 @@ class MainWindow(QtWidgets.QMainWindow):
         self.theme_toggle.addItems(["System", "Light", "Dark"])
         self.theme_toggle.setCurrentText(self.settings.get("theme", "System").capitalize())
         self.theme_toggle.currentTextChanged.connect(self._on_theme_change)
-        toggles_row.addWidget(self.compress_chk)
-        toggles_row.addWidget(self.auto_backup_chk)
-        toggles_row.addWidget(self.auto_restart_chk)
-        toggles_row.addWidget(QtWidgets.QLabel("Tema"))
-        toggles_row.addWidget(self.theme_toggle)
-        toggles_row.addStretch()
-        base_layout.addLayout(toggles_row)
+        prefs_layout.addWidget(self.compress_chk)
+        prefs_layout.addWidget(self.auto_backup_chk)
+        prefs_layout.addWidget(self.auto_restart_chk)
+        prefs_layout.addStretch()
+        prefs_layout.addWidget(QtWidgets.QLabel("Tema"))
+        prefs_layout.addWidget(self.theme_toggle)
+        base_layout.addWidget(prefs_box)
 
+        log_box = QtWidgets.QGroupBox("Log")
+        log_layout = QtWidgets.QVBoxLayout(log_box)
         self.log_text = QtWidgets.QPlainTextEdit()
         self.log_text.setReadOnly(True)
-        self.log_text.setFixedHeight(170)
-        base_layout.addWidget(self.log_text)
-
+        self.log_text.setPlaceholderText("Log di esecuzione...")
+        self.log_text.setFixedHeight(150)
+        log_layout.addWidget(self.log_text)
         util_box = QtWidgets.QHBoxLayout()
         open_log_btn = QtWidgets.QPushButton("Apri log")
+        open_log_btn.setIcon(style.standardIcon(QtWidgets.QStyle.SP_FileIcon))
         open_log_btn.clicked.connect(lambda: self._open_path(self.paths.log_file))
         open_backup_btn = QtWidgets.QPushButton("Cartella backup")
+        open_backup_btn.setIcon(style.standardIcon(QtWidgets.QStyle.SP_DirIcon))
         open_backup_btn.clicked.connect(self._open_backup_dir)
         clear_log_btn = QtWidgets.QPushButton("Pulisci log")
+        clear_log_btn.setIcon(style.standardIcon(QtWidgets.QStyle.SP_DialogResetButton))
         clear_log_btn.clicked.connect(self.log_text.clear)
         about_btn = QtWidgets.QPushButton("About")
+        about_btn.setIcon(style.standardIcon(QtWidgets.QStyle.SP_MessageBoxInformation))
         about_btn.clicked.connect(self._show_about)
         util_box.addWidget(open_log_btn)
         util_box.addWidget(open_backup_btn)
         util_box.addWidget(clear_log_btn)
         util_box.addWidget(about_btn)
         util_box.addStretch()
-        base_layout.addLayout(util_box)
+        log_layout.addLayout(util_box)
+        base_layout.addWidget(log_box)
 
         bottom = QtWidgets.QHBoxLayout()
         self.progress = QtWidgets.QProgressBar()
@@ -202,18 +246,16 @@ class MainWindow(QtWidgets.QMainWindow):
         self.progress.setMaximum(1)
         self.progress.setValue(0)
         bottom.addWidget(self.progress, 1)
-        self.status = QtWidgets.QLabel("Pronto")
-        self.status.setObjectName("statusChip")
-        bottom.addWidget(self.status)
         base_layout.addLayout(bottom)
         self._set_status("Pronto")
 
         adv_tab = QtWidgets.QWidget()
         adv_layout = QtWidgets.QVBoxLayout(adv_tab)
-        adv_layout.setSpacing(8)
+        adv_layout.setSpacing(10)
 
         network_box = QtWidgets.QGroupBox("Rete e download")
         net_layout = QtWidgets.QGridLayout(network_box)
+        net_layout.setVerticalSpacing(8)
         self.proxy_edit = QtWidgets.QLineEdit()
         self.proxy_edit.setPlaceholderText("http://user:pass@host:port")
         net_layout.addWidget(QtWidgets.QLabel("Proxy"), 0, 0)
@@ -228,8 +270,10 @@ class MainWindow(QtWidgets.QMainWindow):
         net_layout.addWidget(self.retries_spin, 2, 1)
         self.apply_net_btn = QtWidgets.QPushButton("Applica rete")
         self.apply_net_btn.setProperty("class", "primary")
+        self.apply_net_btn.setIcon(style.standardIcon(QtWidgets.QStyle.SP_DialogApplyButton))
         self.apply_net_btn.clicked.connect(self.apply_network_settings)
         self.test_net_btn = QtWidgets.QPushButton("Test download")
+        self.test_net_btn.setIcon(style.standardIcon(QtWidgets.QStyle.SP_BrowserReload))
         self.test_net_btn.clicked.connect(self.test_network)
         net_layout.addWidget(self.apply_net_btn, 3, 0)
         net_layout.addWidget(self.test_net_btn, 3, 1)
@@ -238,14 +282,19 @@ class MainWindow(QtWidgets.QMainWindow):
 
         adv_util_box = QtWidgets.QHBoxLayout()
         open_cfg_btn = QtWidgets.QPushButton("Apri config")
+        open_cfg_btn.setIcon(style.standardIcon(QtWidgets.QStyle.SP_FileDialogStart))
         open_cfg_btn.clicked.connect(lambda: self._open_path(self.paths.config))
         open_data_btn = QtWidgets.QPushButton("Cartella dati app")
+        open_data_btn.setIcon(style.standardIcon(QtWidgets.QStyle.SP_DirHomeIcon))
         open_data_btn.clicked.connect(lambda: self._open_path(self.paths.base))
         release_btn = QtWidgets.QPushButton("Cartella release")
+        release_btn.setIcon(style.standardIcon(QtWidgets.QStyle.SP_DirOpenIcon))
         release_btn.clicked.connect(lambda: self._open_path(Path(__file__).resolve().parent.parent / "release_app"))
         open_profile_btn = QtWidgets.QPushButton("Apri profilo")
+        open_profile_btn.setIcon(style.standardIcon(QtWidgets.QStyle.SP_DirIcon))
         open_profile_btn.clicked.connect(self._open_profile_dir)
         open_userjs_btn = QtWidgets.QPushButton("Apri user.js")
+        open_userjs_btn.setIcon(style.standardIcon(QtWidgets.QStyle.SP_FileIcon))
         open_userjs_btn.clicked.connect(self._open_userjs)
         repo_btn = QtWidgets.QPushButton("Betterfox GitHub")
         repo_btn.clicked.connect(lambda: webbrowser.open("https://github.com/yokoffing/Betterfox"))
@@ -269,31 +318,32 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setStyleSheet(
             f"""
             QWidget {{
-                background-color: #0f141b;
-                color: #ecf0f6;
+                background-color: #0c1118;
+                color: #eef3fb;
                 font-family: "Segoe UI", "Inter", sans-serif;
                 font-size: 13px;
             }}
             QGroupBox {{
-                border: 1px solid #1e2530;
+                border: 1px solid #1b2431;
                 border-radius: 12px;
                 margin-top: 10px;
                 padding-top: 14px;
-                background-color: #121926;
+                background-color: #111926;
             }}
             QGroupBox::title {{
                 subcontrol-origin: margin;
                 left: 12px;
                 padding: 0 4px;
-                color: #8eddd7;
+                color: #7ee1d6;
                 font-weight: 600;
+                letter-spacing: 0.2px;
             }}
             QPushButton {{
-                padding: 8px 12px;
+                padding: 9px 12px;
                 border-radius: 10px;
-                border: 1px solid #1e2530;
-                background-color: #131a27;
-                color: #ecf0f6;
+                border: 1px solid #1c2533;
+                background-color: #101724;
+                color: #eef3fb;
             }}
             QPushButton:hover {{
                 border-color: rgba(74,208,200,0.6);
@@ -301,47 +351,65 @@ class MainWindow(QtWidgets.QMainWindow):
             }}
             QPushButton[class="primary"] {{
                 background-color: {self.accent};
-                color: #0f141b;
+                color: #081019;
                 border: none;
-                font-weight: 600;
+                font-weight: 700;
             }}
             QPushButton[class="primary"]:hover {{
-                background-color: #5fe2d9;
+                background-color: #63e4d9;
             }}
-            QLineEdit, QComboBox, QSpinBox {{
+            QLineEdit, QComboBox, QSpinBox, QPlainTextEdit {{
                 padding: 7px 9px;
                 border-radius: 10px;
-                border: 1px solid #1e2530;
-                background-color: #121a27;
+                border: 1px solid #1c2533;
+                background-color: #0f1722;
                 selection-background-color: {self.accent};
-                selection-color: #0f141b;
+                selection-color: #0c1118;
             }}
             QPlainTextEdit {{
-                background-color: #0d121c;
-                color: #ecf0f6;
-                border-radius: 12px;
-                border: 1px solid #1e2530;
-                padding: 8px;
+                min-height: 140px;
             }}
-            #heroCard {{
-                background: qlineargradient(x1:0, y1:0, x2:1, y2:1,
-                    stop:0 rgba(74,208,200,0.18),
-                    stop:1 rgba(18,25,38,0.95));
-                border: 1px solid rgba(74,208,200,0.35);
-                border-radius: 14px;
-                padding: 14px;
+            QTabWidget::pane {{
+                border: 1px solid #1c2533;
+                border-radius: 10px;
+                top: -1px;
+                background: #0f1722;
+            }}
+            QTabBar::tab {{
+                padding: 8px 12px;
+                border: 1px solid #1c2533;
+                border-bottom: none;
+                background: #0f1722;
+                margin-right: 4px;
+                border-top-left-radius: 10px;
+                border-top-right-radius: 10px;
+            }}
+            QTabBar::tab:selected {{
+                background: #131d2c;
+                color: #eef3fb;
+                border-color: #253348;
+            }}
+            QTabBar::tab:!selected {{
+                color: #93a4ba;
             }}
             #statusChip {{
                 padding: 6px 12px;
                 border-radius: 10px;
-                background-color: rgba(74,208,200,0.12);
-                color: #ecf0f6;
+                background-color: rgba(74,208,200,0.15);
+                color: #eef3fb;
+                font-weight: 700;
+            }}
+            #pill {{
+                padding: 6px 10px;
+                border-radius: 8px;
+                background-color: #111f2e;
+                border: 1px solid #1e2b3c;
                 font-weight: 600;
             }}
             QProgressBar {{
-                border: 1px solid #1e2530;
+                border: 1px solid #1c2533;
                 border-radius: 8px;
-                background: #121926;
+                background: #111926;
                 text-align: center;
             }}
             QProgressBar::chunk {{

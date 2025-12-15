@@ -11,6 +11,7 @@
 - About dialog in UI e badge stato colorato; controllo spazio libero prima dei backup con log di warning.
 - Script di build aggiornato per PyInstaller 6.17 (percorsi `--add-data` corretti) e build one-file verificata in `release_app/`.
 - Fix crash all’avvio: l’area log ora è inizializzata prima dei pulsanti utilità (clear log).
+- UI rinnovata (tab base/avanzate compatti), pulsanti con icone native, chip per versioni, palette più leggibile e log compatto.
 
 ## 3.0.0
 - Nuova UI con layout a schede, status live e barra di avanzamento.
