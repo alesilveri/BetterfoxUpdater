@@ -1,50 +1,48 @@
-# Betterfox Updater
+# Betterfox Updater (desktop app)
 
-Applicazione desktop (PySide6) per aggiornare Betterfox (user.js) con backup automatico, controllo versioni e modalità headless. CI/CD GitHub già pronta con build Windows e release draft.
+Aggiorna Betterfox (user.js) in un click, con backup di sicurezza e controlli di versione. Pensata per uso personale, semplice da usare, pronta al rilascio.
 
-## Funzioni
-- UI moderna con tema System/Light/Dark, hero card e badge di stato colorato.
-- Download user.js con barra di avanzamento, check versioni locale/remota/GitHub commit.
-- Backup profilo con zip opzionale, retention, controllo spazio libero e riavvio Firefox facoltativo.
-- Sezione rete: proxy, timeout, retry, test download integrato.
-- Tray icon (Mostra/Esci) e toast per successi/errori.
-- Pulsanti rapidi: apri log/config/backup/profilo/user.js/cartella dati/release, pulisci log, About.
-- CLI headless: `python -m app --update --profile <path> --backup <path> --no-backup --no-restart`.
+## Cosa fa (in breve)
+- Scarica l’ultimo `user.js` Betterfox e mostra versione locale/remota/ultimo commit.
+- Backup automatico del profilo (zip opzionale, retention) con avviso se lo spazio è poco.
+- Riavvio Firefox opzionale dopo l’update.
+- Tema System/Light/Dark, badge di stato colorati, tray con toast per esiti.
+- Rete configurabile (proxy/timeout/retry) e test download integrato.
+- Utility rapide: apri log, config, backup, profilo, `user.js`, cartella dati/release, pulisci log, About.
+- Modalità headless: `python -m app --update --profile <path> --backup <path> [--no-backup] [--no-restart]`.
 
-## Requisiti
-- Python 3.10+ su Windows (per l exe serve solo Windows).
+## Come si usa (GUI)
+1. Avvia `python -m app` (oppure l’exe buildata).
+2. Seleziona il profilo Firefox (rilevato automaticamente se possibile).
+3. (Facoltativo) scegli cartella backup e opzioni (zip, retention).
+4. Premi **Aggiorna**. Segui la barra di avanzamento e il badge di stato.
 
-## Setup sviluppo
+## Setup rapido (sviluppo)
 ```bash
 python -m pip install -r requirements.txt
 python -m app
 ```
 
-## Build locale (exe)
-Su Windows:
+## Build locale (exe Windows)
 ```bat
 build_app.bat
 ```
-Output: `release_app/BetterfoxUpdater.exe` (icona inclusa se presente in `app/resources/betterfox.ico`).
+Troverai `release_app/BetterfoxUpdater.exe` (usa l’icona se presente in `app/resources/betterfox.ico`).
 
-## CI/CD
-- `.github/workflows/lint.yml`: py_compile su push/PR verso main.
-- `.github/workflows/windows-build.yml`: manuale (workflow_dispatch), genera exe e artifact.
-- `.github/workflows/release.yml`: manuale con input `version`, builda su Windows e crea bozza di release con exe allegata.
+## CI/CD già pronta
+- `.github/workflows/lint.yml`: py_compile su push/PR.
+- `.github/workflows/windows-build.yml`: workflow manuale → exe come artifact.
+- `.github/workflows/release.yml`: workflow manuale con input `version` → bozza release con exe allegata.
 
-## Config e dati runtime
-- `%LOCALAPPDATA%/BetterfoxUpdater/config.ini` e `error.log`
-- Backup di default in `%LOCALAPPDATA%/BetterfoxUpdater/backups`
+## Dove salva i dati
+- Config/log: `%LOCALAPPDATA%/BetterfoxUpdater/` (`config.ini`, `error.log`)
+- Backup: `%LOCALAPPDATA%/BetterfoxUpdater/backups` (di default)
 - Template config: `app/resources/config_template.ini`
 
-## Script utili
-- `tools/bump_version.py <version> --title "nota"`: aggiorna `APP_VERSION` e crea sezione changelog se manca.
+## Strumenti
+- `tools/bump_version.py <version> --title "nota"` aggiorna `APP_VERSION` e aggiunge la sezione al changelog.
 
-## Note design
-UI PySide6 con palette Fusion custom, badge di stato colorato e utilità rapide. Grafica minimale ma leggibile; pronta a skin personalizzata se serve.
-
-## Backlog breve
-- Scheduler (attività pianificata) per aggiornamenti automatici.
-- Auto-update app (check versione json remoto + notifica) e palette/accents custom.
-- Installer NSIS/MSI sopra l exe PyInstaller.
-```
+## Backlog (idee vicine)
+- Scheduler per aggiornamenti automatici (Attività pianificata).
+- Auto-update app (check remoto e notifica).
+- Installer NSIS/MSI sopra l’exe PyInstaller.
