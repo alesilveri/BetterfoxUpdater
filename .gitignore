@@ -1,0 +1,19 @@
+# Python / Virtualenv
+__pycache__/
+*.py[cod]
+*.pyo
+venv/
+
+# PyInstaller outputs
+build_app/
+dist_app/
+release_app/
+*.spec
+
+# Logs / runtime
+*.log
+error.log
+
+# OS noise
+.DS_Store
+Thumbs.db
