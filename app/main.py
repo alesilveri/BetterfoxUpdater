@@ -62,7 +62,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.svc = svc
         self.settings = settings
         self.paths = paths
-        self.accent = "#4ad0c8"
+        self.accent = "#3cd0a7"
         self.sig = self.Signals()
         self.sig.log.connect(self._append_log)
         self.sig.status.connect(self._set_status)
@@ -93,8 +93,8 @@ class MainWindow(QtWidgets.QMainWindow):
         header = QtWidgets.QHBoxLayout()
         title = QtWidgets.QLabel("Betterfox Updater")
         title.setStyleSheet("font-size:18px; font-weight:700;")
-        subtitle = QtWidgets.QLabel("Aggiorna user.js con backup sicuri e controlli rapidi.")
-        subtitle.setStyleSheet("color:#9fb3c8;")
+        subtitle = QtWidgets.QLabel("Aggiorna Betterfox in modo sicuro e leggero.")
+        subtitle.setStyleSheet("color:#9aa5b5;")
         header_text = QtWidgets.QVBoxLayout()
         header_text.addWidget(title)
         header_text.addWidget(subtitle)
@@ -333,98 +333,99 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setStyleSheet(
             f"""
             QWidget {{
-                background-color: #0c1118;
-                color: #eef3fb;
+                background-color: #0b0d10;
+                color: #f4f7fb;
                 font-family: "Segoe UI", "Inter", sans-serif;
                 font-size: 13px;
             }}
             QGroupBox {{
-                border: 1px solid #1b2431;
+                border: 1px solid #181e29;
                 border-radius: 12px;
                 margin-top: 10px;
                 padding-top: 14px;
-                background-color: #111926;
+                background-color: #0f131b;
             }}
             QGroupBox::title {{
                 subcontrol-origin: margin;
                 left: 12px;
                 padding: 0 4px;
-                color: #7ee1d6;
+                color: #6ee0c2;
                 font-weight: 600;
                 letter-spacing: 0.2px;
             }}
             QPushButton {{
                 padding: 9px 12px;
                 border-radius: 10px;
-                border: 1px solid #1c2533;
-                background-color: #101724;
-                color: #eef3fb;
+                border: 1px solid #1a202b;
+                background-color: #0f131b;
+                color: #f4f7fb;
             }}
             QPushButton:hover {{
-                border-color: rgba(74,208,200,0.6);
-                background-color: rgba(74,208,200,0.12);
+                border-color: rgba(60,208,167,0.5);
+                background-color: rgba(60,208,167,0.12);
             }}
             QPushButton[class="primary"] {{
                 background-color: {self.accent};
-                color: #081019;
+                color: #0a120f;
                 border: none;
                 font-weight: 700;
             }}
             QPushButton[class="primary"]:hover {{
-                background-color: #63e4d9;
+                background-color: #58e4c8;
             }}
             QLineEdit, QComboBox, QSpinBox, QPlainTextEdit {{
                 padding: 7px 9px;
                 border-radius: 10px;
-                border: 1px solid #1c2533;
-                background-color: #0f1722;
+                border: 1px solid #181e29;
+                background-color: #0d1118;
                 selection-background-color: {self.accent};
-                selection-color: #0c1118;
+                selection-color: #0b0d10;
             }}
             QPlainTextEdit {{
                 min-height: 140px;
+                line-height: 1.3em;
             }}
             QTabWidget::pane {{
-                border: 1px solid #1c2533;
+                border: 1px solid #181e29;
                 border-radius: 10px;
                 top: -1px;
-                background: #0f1722;
+                background: #0d1118;
             }}
             QTabBar::tab {{
                 padding: 8px 12px;
-                border: 1px solid #1c2533;
+                border: 1px solid #181e29;
                 border-bottom: none;
-                background: #0f1722;
+                background: #0d1118;
                 margin-right: 4px;
                 border-top-left-radius: 10px;
                 border-top-right-radius: 10px;
             }}
             QTabBar::tab:selected {{
-                background: #131d2c;
-                color: #eef3fb;
-                border-color: #253348;
+                background: #111826;
+                color: #f4f7fb;
+                border-color: #222c3b;
             }}
             QTabBar::tab:!selected {{
-                color: #93a4ba;
+                color: #94a1b0;
             }}
             #statusChip {{
                 padding: 6px 12px;
                 border-radius: 10px;
-                background-color: rgba(74,208,200,0.15);
-                color: #eef3fb;
+                background-color: rgba(60,208,167,0.16);
+                color: #f4f7fb;
                 font-weight: 700;
             }}
             #pill {{
                 padding: 6px 10px;
                 border-radius: 8px;
-                background-color: #111f2e;
-                border: 1px solid #1e2b3c;
+                background-color: #0f1923;
+                border: 1px solid #1b2736;
                 font-weight: 600;
             }}
             QProgressBar {{
-                border: 1px solid #1c2533;
+                border: 1px solid #181e29;
                 border-radius: 8px;
-                background: #111926;
+                background: #0f131b;
                 text-align: center;
             }}
             QProgressBar::chunk {{
