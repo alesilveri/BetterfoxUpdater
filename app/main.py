@@ -348,13 +348,18 @@ class MainWindow(QtWidgets.QMainWindow):
         self.auto_restart_chk.setChecked(self.settings.get("auto_restart", "yes") == "yes")
         self.proxy_edit.setText(self.settings.get("Network", "proxy", ""))
         try:
-            self.timeout_spin.setValue(int(self.settings.get("Network", "timeout", "12")))
-            self.retries_spin.setValue(int(self.settings.get("Network", "retries", "3")))
+            self.timeout_spin.setValue(int(self.settings.get("Network", "timeout", "12") or "12"))
+            self.retries_spin.setValue(int(self.settings.get("Network", "retries", "3") or "3"))
         except Exception:
             self.timeout_spin.setValue(12)
             self.retries_spin.setValue(3)
         if not self.backup_edit.text():
             self.backup_edit.setText(str(self.paths.base / "backups"))
+        # fallback sicuro per retention
+        try:
+            self.retention_spin.setValue(int(self.settings.get("retention_days", "60") or "60"))
+        except Exception:
+            self.retention_spin.setValue(60)
 
     def _bind_settings(self):
         self.profile_edit.editingFinished.connect(lambda: self.settings.set("profile_path", self.profile_edit.text()))

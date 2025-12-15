@@ -77,10 +77,14 @@ class Settings:
             self.cfg.write(f)
 
     def get(self, section: str, key: Optional[str] = None, default: str = "") -> str:
-        """Compat: get('theme') -> Settings, get('Network','timeout')."""
+        """Compat: get('theme') -> Settings, get('Network','timeout'). Ritorna default se vuoto."""
         if key is None:
-            return self.cfg["Settings"].get(section, default)
-        return self.cfg.get(section, key, fallback=default)
+            val = self.cfg["Settings"].get(section, default)
+        else:
+            val = self.cfg.get(section, key, fallback=default)
+        if val is None or str(val).strip() == "":
+            return default
+        return val
 
     def set(self, section_or_key: str, key: Optional[str] = None, value: Optional[str] = None):
         """Compatibile con set('theme', 'dark') o set('Network', 'timeout', '15')."""
