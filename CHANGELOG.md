@@ -13,6 +13,7 @@
 - Fix crash all’avvio: l’area log ora è inizializzata prima dei pulsanti utilità (clear log).
 - UI rinnovata (tab base/avanzate compatti), pulsanti con icone native, chip per versioni, palette più leggibile e log compatto.
 - Layout ridisegnato: colonne base (azioni+percorsi+preferenze a sinistra, log/progress a destra) per evitare tagli e spazi vuoti su finestre piccole.
+- Spaziatura affinata (log più alto, progress sottile, form più stretto) e palette charcoal/mint con bordi soft per una lettura più chiara.
 
 ## 3.0.0
 - Nuova UI con layout a schede, status live e barra di avanzamento.

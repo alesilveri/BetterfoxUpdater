@@ -62,7 +62,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.svc = svc
         self.settings = settings
         self.paths = paths
-        self.accent = "#3cd0a7"
+        self.accent = "#48e1c2"
         self.sig = self.Signals()
         self.sig.log.connect(self._append_log)
         self.sig.status.connect(self._set_status)
@@ -84,8 +84,6 @@ class MainWindow(QtWidgets.QMainWindow):
     def _build_ui(self):
         cw = QtWidgets.QWidget()
         self.setCentralWidget(cw)
-        layout = QtWidgets.QVBoxLayout(cw)
-        layout.setContentsMargins(16, 12, 16, 12)
         layout.setSpacing(10)
 
         style = self.style()
@@ -93,8 +91,8 @@ class MainWindow(QtWidgets.QMainWindow):
         header = QtWidgets.QHBoxLayout()
         title = QtWidgets.QLabel("Betterfox Updater")
         title.setStyleSheet("font-size:18px; font-weight:700;")
-        subtitle = QtWidgets.QLabel("Aggiorna Betterfox in modo sicuro e leggero.")
-        subtitle.setStyleSheet("color:#9aa5b5;")
+        subtitle = QtWidgets.QLabel("Aggiorna Betterfox con backup sicuri e percorsi chiari.")
+        subtitle.setStyleSheet("color:#97a6b8;")
         header_text = QtWidgets.QVBoxLayout()
         header_text.addWidget(title)
         header_text.addWidget(subtitle)
@@ -109,11 +107,12 @@ class MainWindow(QtWidgets.QMainWindow):
 
         base_tab = QtWidgets.QWidget()
         base_layout = QtWidgets.QVBoxLayout(base_tab)
-        base_layout.setSpacing(12)
+        base_layout.setSpacing(10)
 
-        versions_box = QtWidgets.QGroupBox("Versioni e stato")
+        versions_box = QtWidgets.QGroupBox("Versioni")
         versions_grid = QtWidgets.QGridLayout(versions_box)
         versions_grid.setVerticalSpacing(6)
+        versions_grid.setHorizontalSpacing(10)
         self.local_lbl = QtWidgets.QLabel("n/d")
         self.remote_lbl = QtWidgets.QLabel("n/d")
         self.github_lbl = QtWidgets.QLabel("n/d")
@@ -129,17 +128,11 @@ class MainWindow(QtWidgets.QMainWindow):
         versions_grid.addWidget(self.github_lbl, 1, 2)
         versions_grid.addWidget(self.fx_lbl, 1, 3)
         base_layout.addWidget(versions_box)
+        base_layout.addSpacing(6)
 
-        body = QtWidgets.QHBoxLayout()
-        body.setSpacing(12)
-
-        left_col = QtWidgets.QVBoxLayout()
-        left_col.setSpacing(10)
-
-        actions_box = QtWidgets.QGroupBox("Azioni rapide")
-        actions_layout = QtWidgets.QGridLayout(actions_box)
-        actions_layout.setHorizontalSpacing(10)
-        actions_layout.setVerticalSpacing(8)
+        actions_box = QtWidgets.QGroupBox("Azioni")
+        actions_layout = QtWidgets.QHBoxLayout(actions_box)
+        actions_layout.setSpacing(12)
         self.check_btn = QtWidgets.QPushButton("Controlla versioni")
         self.check_btn.setIcon(style.standardIcon(QtWidgets.QStyle.SP_BrowserReload))
         self.update_btn = QtWidgets.QPushButton("Aggiorna Betterfox")
@@ -150,16 +143,17 @@ class MainWindow(QtWidgets.QMainWindow):
         self.check_btn.clicked.connect(self.check_versions)
         self.update_btn.clicked.connect(self.run_update)
         self.backup_btn.clicked.connect(self.run_backup)
-        actions_layout.addWidget(self.check_btn, 0, 0)
-        actions_layout.addWidget(self.update_btn, 0, 1)
-        actions_layout.addWidget(self.backup_btn, 1, 0, 1, 2)
-        left_col.addWidget(actions_box)
+        actions_layout.addWidget(self.check_btn)
+        actions_layout.addWidget(self.update_btn)
+        actions_layout.addWidget(self.backup_btn)
+        actions_layout.addStretch()
+        base_layout.addWidget(actions_box)
 
         paths_box = QtWidgets.QGroupBox("Percorsi")
         form = QtWidgets.QFormLayout(paths_box)
         form.setLabelAlignment(QtCore.Qt.AlignLeft)
         form.setFormAlignment(QtCore.Qt.AlignLeft | QtCore.Qt.AlignVCenter)
-        form.setHorizontalSpacing(10)
+        form.setHorizontalSpacing(8)
         self.profile_edit = QtWidgets.QLineEdit()
         profile_row = QtWidgets.QHBoxLayout()
         browse_btn = QtWidgets.QPushButton("Sfoglia")
@@ -198,7 +192,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.retention_spin = QtWidgets.QSpinBox()
         self.retention_spin.setRange(7, 120)
         form.addRow("Retention (giorni)", self.retention_spin)
-        left_col.addWidget(paths_box)
+        base_layout.addWidget(paths_box)
 
         prefs_box = QtWidgets.QGroupBox("Preferenze")
         prefs_layout = QtWidgets.QHBoxLayout(prefs_box)
@@ -216,19 +210,14 @@ class MainWindow(QtWidgets.QMainWindow):
         prefs_layout.addStretch()
         prefs_layout.addWidget(QtWidgets.QLabel("Tema"))
         prefs_layout.addWidget(self.theme_toggle)
-        left_col.addWidget(prefs_box)
-
-        left_col.addStretch()
-
-        right_col = QtWidgets.QVBoxLayout()
-        right_col.setSpacing(10)
+        base_layout.addWidget(prefs_box)
 
         log_box = QtWidgets.QGroupBox("Log")
         log_layout = QtWidgets.QVBoxLayout(log_box)
         self.log_text = QtWidgets.QPlainTextEdit()
         self.log_text.setReadOnly(True)
         self.log_text.setPlaceholderText("Log di esecuzione...")
-        self.log_text.setFixedHeight(200)
+        self.log_text.setFixedHeight(240)
         log_layout.addWidget(self.log_text)
         util_box = QtWidgets.QHBoxLayout()
         open_log_btn = QtWidgets.QPushButton("Apri log")
@@ -249,19 +238,15 @@ class MainWindow(QtWidgets.QMainWindow):
         util_box.addWidget(about_btn)
         util_box.addStretch()
         log_layout.addLayout(util_box)
-        right_col.addWidget(log_box)
+        base_layout.addWidget(log_box)
 
-        progress_row = QtWidgets.QHBoxLayout()
+        bottom = QtWidgets.QHBoxLayout()
         self.progress = QtWidgets.QProgressBar()
         self.progress.setMinimum(0)
         self.progress.setMaximum(1)
         self.progress.setValue(0)
-        progress_row.addWidget(self.progress, 1)
-        right_col.addLayout(progress_row)
-
-        body.addLayout(left_col, 3)
-        body.addLayout(right_col, 2)
-        base_layout.addLayout(body)
+        bottom.addWidget(self.progress, 1)
+        base_layout.addLayout(bottom)
         self._set_status("Pronto")
 
         adv_tab = QtWidgets.QWidget()
@@ -305,7 +290,7 @@ class MainWindow(QtWidgets.QMainWindow):
         release_btn = QtWidgets.QPushButton("Cartella release")
         release_btn.setIcon(style.standardIcon(QtWidgets.QStyle.SP_DirOpenIcon))
         release_btn.clicked.connect(lambda: self._open_path(Path(__file__).resolve().parent.parent / "release_app"))
-        open_profile_btn = QtWidgets.QPushButton("Apri profilo")
+        open_profile_btn = QtWidgets.QPushButton("Apri profilo Firefox")
         open_profile_btn.setIcon(style.standardIcon(QtWidgets.QStyle.SP_DirIcon))
         open_profile_btn.clicked.connect(self._open_profile_dir)
         open_userjs_btn = QtWidgets.QPushButton("Apri user.js")
@@ -333,32 +318,34 @@ class MainWindow(QtWidgets.QMainWindow):
         self.setStyleSheet(
             f"""
             QWidget {{
-                background-color: #0b0d10;
+                background-color: #0c1116;
                 color: #f4f7fb;
                 font-family: "Segoe UI", "Inter", sans-serif;
                 font-size: 13px;
             }}
             QGroupBox {{
-                border: 1px solid #181e29;
+                border: 1px solid rgba(24, 30, 41, 0.4);
                 border-radius: 12px;
-                margin-top: 10px;
-                padding-top: 14px;
-                background-color: #0f131b;
+                margin-top: 8px;
+                padding-top: 12px;
+                background-color: #10151c;
             }}
             QGroupBox::title {{
                 subcontrol-origin: margin;
-                left: 12px;
+                left: 10px;
                 padding: 0 4px;
-                color: #6ee0c2;
+                color: #5ed9c0;
                 font-weight: 600;
                 letter-spacing: 0.2px;
+                font-size: 14px;
             }}
             QPushButton {{
                 padding: 9px 12px;
                 border-radius: 10px;
-                border: 1px solid #1a202b;
+                border: 1px solid rgba(26, 32, 43, 0.5);
                 background-color: #0f131b;
                 color: #f4f7fb;
+                font-size: 13px;
             }}
             QPushButton:hover {{
                 border-color: rgba(60,208,167,0.5);
@@ -369,6 +356,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 color: #0a120f;
                 border: none;
                 font-weight: 700;
+                letter-spacing: 0.1px;
             }}
             QPushButton[class="primary"]:hover {{
                 background-color: #58e4c8;
@@ -376,8 +364,8 @@ class MainWindow(QtWidgets.QMainWindow):
             QLineEdit, QComboBox, QSpinBox, QPlainTextEdit {{
                 padding: 7px 9px;
                 border-radius: 10px;
-                border: 1px solid #181e29;
-                background-color: #0d1118;
+                border: 1px solid rgba(24, 30, 41, 0.5);
+                background-color: #0f141b;
                 selection-background-color: {self.accent};
                 selection-color: #0b0d10;
             }}
@@ -386,14 +374,14 @@ class MainWindow(QtWidgets.QMainWindow):
                 line-height: 1.3em;
             }}
             QTabWidget::pane {{
-                border: 1px solid #181e29;
+                border: 1px solid rgba(24, 30, 41, 0.4);
                 border-radius: 10px;
                 top: -1px;
-                background: #0d1118;
+                background: #0f141b;
             }}
             QTabBar::tab {{
                 padding: 8px 12px;
-                border: 1px solid #181e29;
+                border: 1px solid rgba(24, 30, 41, 0.4);
                 border-bottom: none;
                 background: #0d1118;
                 margin-right: 4px;
@@ -401,12 +389,12 @@ class MainWindow(QtWidgets.QMainWindow):
                 border-top-right-radius: 10px;
             }}
             QTabBar::tab:selected {{
-                background: #111826;
+                background: #121924;
                 color: #f4f7fb;
-                border-color: #222c3b;
+                border-color: rgba(34, 44, 59, 0.8);
             }}
             QTabBar::tab:!selected {{
-                color: #94a1b0;
+                color: #9aa7b6;
             }}
             #statusChip {{
                 padding: 6px 12px;
@@ -418,15 +406,16 @@ class MainWindow(QtWidgets.QMainWindow):
             #pill {{
                 padding: 6px 10px;
                 border-radius: 8px;
-                background-color: #0f1923;
-                border: 1px solid #1b2736;
+                background-color: #0f1a22;
+                border: 1px solid rgba(27, 39, 54, 0.8);
                 font-weight: 600;
             }}
             QProgressBar {{
-                border: 1px solid #181e29;
+                border: 1px solid rgba(24, 30, 41, 0.5);
                 border-radius: 8px;
-                background: #0f131b;
+                background: #0f141b;
                 text-align: center;
+                min-height: 12px;
             }}
             QProgressBar::chunk {{
                 background-color: {self.accent};
