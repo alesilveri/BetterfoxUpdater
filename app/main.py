@@ -62,7 +62,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.svc = svc
         self.settings = settings
         self.paths = paths
-        self.accent = "#5B8CFF"
+        self.accent = "#4ad0c8"
         self.sig = self.Signals()
         self.sig.log.connect(self._append_log)
         self.sig.status.connect(self._set_status)
@@ -70,7 +70,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.sig.busy.connect(self._set_busy)
         self.sig.progress.connect(self._set_progress)
         self.setWindowTitle(f"Betterfox Updater v{APP_VERSION}")
-        self.resize(960, 640)
+        self.resize(760, 520)
+        self.setMinimumSize(700, 460)
         self.tray = None
         self.theme_action = None
         self._apply_stylesheet()
@@ -79,20 +80,19 @@ class MainWindow(QtWidgets.QMainWindow):
         self._bind_settings()
         self._load_profiles()
         self._build_tray()
-        self._toggle_advanced(False)
 
     def _build_ui(self):
         cw = QtWidgets.QWidget()
         self.setCentralWidget(cw)
         layout = QtWidgets.QVBoxLayout(cw)
-        layout.setContentsMargins(16, 12, 16, 12)
-        layout.setSpacing(12)
+        layout.setContentsMargins(14, 10, 14, 10)
+        layout.setSpacing(6)
 
         header = QtWidgets.QHBoxLayout()
         title = QtWidgets.QLabel("Betterfox Updater")
-        title.setStyleSheet("font-size:18px; font-weight:600;")
-        subtitle = QtWidgets.QLabel("Aggiorna Betterfox con backup e check versioni")
-        subtitle.setStyleSheet("color:gray;")
+        title.setStyleSheet("font-size:16px; font-weight:600;")
+        subtitle = QtWidgets.QLabel("Compatto, backup e update rapidi")
+        subtitle.setStyleSheet("color:#9fb3c8;")
         header_text = QtWidgets.QVBoxLayout()
         header_text.addWidget(title)
         header_text.addWidget(subtitle)
@@ -100,118 +100,123 @@ class MainWindow(QtWidgets.QMainWindow):
         header.addStretch()
         layout.addLayout(header)
 
-        hero = QtWidgets.QFrame()
-        hero.setObjectName("heroCard")
-        hero_layout = QtWidgets.QHBoxLayout(hero)
-        hero_title = QtWidgets.QVBoxLayout()
-        hero_head = QtWidgets.QLabel("Pronto per l'update")
-        hero_head.setStyleSheet("font-size:16px; font-weight:600;")
-        hero_body = QtWidgets.QLabel("Backup automatico, download Betterfox in streaming, riavvio Firefox opzionale.")
-        hero_body.setWordWrap(True)
-        hero_title.addWidget(hero_head)
-        hero_title.addWidget(hero_body)
-        hero_layout.addLayout(hero_title, 1)
-        hero_actions = QtWidgets.QHBoxLayout()
-        repo_btn = QtWidgets.QPushButton("Apri Betterfox GitHub")
-        repo_btn.clicked.connect(lambda: webbrowser.open("https://github.com/yokoffing/Betterfox"))
-        changelog_btn = QtWidgets.QPushButton("Changelog locale")
-        changelog_btn.clicked.connect(lambda: self._open_path(Path("CHANGELOG.md").resolve()))
-        hero_actions.addWidget(repo_btn)
-        hero_actions.addWidget(changelog_btn)
-        hero_layout.addLayout(hero_actions)
-        layout.addWidget(hero)
+        tabs = QtWidgets.QTabWidget()
 
-        # Toggle avanzate
-        toggle_row = QtWidgets.QHBoxLayout()
-        self.advanced_toggle = QtWidgets.QCheckBox("Mostra opzioni avanzate")
-        self.advanced_toggle.stateChanged.connect(lambda _: self._toggle_advanced(self.advanced_toggle.isChecked()))
-        toggle_row.addWidget(self.advanced_toggle)
-        toggle_row.addStretch()
-        layout.addLayout(toggle_row)
+        base_tab = QtWidgets.QWidget()
+        base_layout = QtWidgets.QVBoxLayout(base_tab)
+        base_layout.setSpacing(8)
 
-        # Profile area
-        profile_box = QtWidgets.QGroupBox("Profilo Firefox")
-        profile_layout = QtWidgets.QGridLayout(profile_box)
-        profile_layout.addWidget(QtWidgets.QLabel("Percorso profilo"), 0, 0)
-        self.profile_edit = QtWidgets.QLineEdit()
-        profile_layout.addWidget(self.profile_edit, 0, 1)
-        browse_btn = QtWidgets.QPushButton("Sfoglia")
-        browse_btn.clicked.connect(self.choose_profile)
-        profile_layout.addWidget(browse_btn, 0, 2)
-
-        self.profile_combo = QtWidgets.QComboBox()
-        self.profile_combo.currentTextChanged.connect(self._on_profile_selected)
-        profile_layout.addWidget(QtWidgets.QLabel("Profili rilevati"), 1, 0)
-        profile_layout.addWidget(self.profile_combo, 1, 1)
-        reload_btn = QtWidgets.QPushButton("Rileva")
-        reload_btn.clicked.connect(self._load_profiles)
-        profile_layout.addWidget(reload_btn, 1, 2)
-
-        self.theme_toggle = QtWidgets.QComboBox()
-        self.theme_toggle.addItems(["System", "Light", "Dark"])
-        self.theme_toggle.setCurrentText(self.settings.get("theme", "System").capitalize())
-        self.theme_toggle.currentTextChanged.connect(self._on_theme_change)
-        profile_layout.addWidget(QtWidgets.QLabel("Tema"), 2, 0)
-        profile_layout.addWidget(self.theme_toggle, 2, 1)
-        layout.addWidget(profile_box)
-
-        # Actions
-        actions = QtWidgets.QHBoxLayout()
+        actions_box = QtWidgets.QGroupBox("Aggiornamento")
+        actions_layout = QtWidgets.QGridLayout(actions_box)
         self.check_btn = QtWidgets.QPushButton("Controlla versioni")
-        self.check_btn.clicked.connect(self.check_versions)
         self.update_btn = QtWidgets.QPushButton("Aggiorna")
-        self.update_btn.clicked.connect(self.run_update)
         self.update_btn.setProperty("class", "primary")
         self.backup_btn = QtWidgets.QPushButton("Solo backup")
+        self.check_btn.clicked.connect(self.check_versions)
+        self.update_btn.clicked.connect(self.run_update)
         self.backup_btn.clicked.connect(self.run_backup)
-        actions.addWidget(self.check_btn)
-        actions.addWidget(self.update_btn)
-        actions.addWidget(self.backup_btn)
-        layout.addLayout(actions)
-
-        # Stats grid
-        stats_box = QtWidgets.QGroupBox("Stato")
-        stats = QtWidgets.QGridLayout(stats_box)
+        actions_layout.addWidget(self.check_btn, 0, 0)
+        actions_layout.addWidget(self.update_btn, 0, 1)
+        actions_layout.addWidget(self.backup_btn, 0, 2)
         self.local_lbl = QtWidgets.QLabel("n/d")
         self.remote_lbl = QtWidgets.QLabel("n/d")
         self.github_lbl = QtWidgets.QLabel("n/d")
         self.fx_lbl = QtWidgets.QLabel("n/d")
-        stats.addWidget(QtWidgets.QLabel("Locale"), 0, 0)
-        stats.addWidget(self.local_lbl, 1, 0)
-        stats.addWidget(QtWidgets.QLabel("Remoto"), 0, 1)
-        stats.addWidget(self.remote_lbl, 1, 1)
-        stats.addWidget(QtWidgets.QLabel("GitHub"), 0, 2)
-        stats.addWidget(self.github_lbl, 1, 2)
-        stats.addWidget(QtWidgets.QLabel("Firefox"), 0, 3)
-        stats.addWidget(self.fx_lbl, 1, 3)
-        layout.addWidget(stats_box)
+        actions_layout.addWidget(QtWidgets.QLabel("Locale"), 1, 0)
+        actions_layout.addWidget(QtWidgets.QLabel("Remoto"), 1, 1)
+        actions_layout.addWidget(QtWidgets.QLabel("GitHub"), 1, 2)
+        actions_layout.addWidget(QtWidgets.QLabel("Firefox"), 1, 3)
+        actions_layout.addWidget(self.local_lbl, 2, 0)
+        actions_layout.addWidget(self.remote_lbl, 2, 1)
+        actions_layout.addWidget(self.github_lbl, 2, 2)
+        actions_layout.addWidget(self.fx_lbl, 2, 3)
+        base_layout.addWidget(actions_box)
 
-        # Backup settings
-        backup_box = QtWidgets.QGroupBox("Backup")
-        backup_layout = QtWidgets.QGridLayout(backup_box)
-        backup_layout.addWidget(QtWidgets.QLabel("Cartella backup"), 0, 0)
+        paths_box = QtWidgets.QGroupBox("Percorsi")
+        paths_layout = QtWidgets.QGridLayout(paths_box)
+        paths_layout.addWidget(QtWidgets.QLabel("Profilo Firefox"), 0, 0)
+        self.profile_edit = QtWidgets.QLineEdit()
+        paths_layout.addWidget(self.profile_edit, 0, 1)
+        browse_btn = QtWidgets.QPushButton("Sfoglia")
+        browse_btn.clicked.connect(self.choose_profile)
+        paths_layout.addWidget(browse_btn, 0, 2)
+        self.profile_combo = QtWidgets.QComboBox()
+        self.profile_combo.currentTextChanged.connect(self._on_profile_selected)
+        paths_layout.addWidget(QtWidgets.QLabel("Profili trovati"), 1, 0)
+        paths_layout.addWidget(self.profile_combo, 1, 1)
+        reload_btn = QtWidgets.QPushButton("Rileva")
+        reload_btn.clicked.connect(self._load_profiles)
+        paths_layout.addWidget(reload_btn, 1, 2)
+        paths_layout.addWidget(QtWidgets.QLabel("Cartella backup"), 2, 0)
         self.backup_edit = QtWidgets.QLineEdit()
-        backup_layout.addWidget(self.backup_edit, 0, 1)
+        paths_layout.addWidget(self.backup_edit, 2, 1)
         backup_btn = QtWidgets.QPushButton("Scegli")
         backup_btn.clicked.connect(self.choose_backup)
-        backup_layout.addWidget(backup_btn, 0, 2)
-        backup_layout.addWidget(QtWidgets.QLabel("Giorni retention"), 1, 0)
+        paths_layout.addWidget(backup_btn, 2, 2)
+        paths_layout.addWidget(QtWidgets.QLabel("Retention (giorni)"), 3, 0)
         self.retention_spin = QtWidgets.QSpinBox()
         self.retention_spin.setRange(7, 120)
-        backup_layout.addWidget(self.retention_spin, 1, 1)
-        self.compress_chk = QtWidgets.QCheckBox("Comprimi zip")
-        backup_layout.addWidget(self.compress_chk, 2, 0)
-        self.auto_backup_chk = QtWidgets.QCheckBox("Backup automatico prima di aggiornare")
-        backup_layout.addWidget(self.auto_backup_chk, 2, 1, 1, 2)
-        self.auto_restart_chk = QtWidgets.QCheckBox("Riavvia Firefox dopo l'update")
-        backup_layout.addWidget(self.auto_restart_chk, 3, 0, 1, 2)
-        layout.addWidget(backup_box)
+        paths_layout.addWidget(self.retention_spin, 3, 1)
+        base_layout.addWidget(paths_box)
 
-        network_box = QtWidgets.QGroupBox("Rete e resilienza download")
+        toggles_row = QtWidgets.QHBoxLayout()
+        self.compress_chk = QtWidgets.QCheckBox("Comprimi backup")
+        self.auto_backup_chk = QtWidgets.QCheckBox("Backup prima di aggiornare")
+        self.auto_restart_chk = QtWidgets.QCheckBox("Riavvia Firefox dopo update")
+        self.theme_toggle = QtWidgets.QComboBox()
+        self.theme_toggle.addItems(["System", "Light", "Dark"])
+        self.theme_toggle.setCurrentText(self.settings.get("theme", "System").capitalize())
+        self.theme_toggle.currentTextChanged.connect(self._on_theme_change)
+        toggles_row.addWidget(self.compress_chk)
+        toggles_row.addWidget(self.auto_backup_chk)
+        toggles_row.addWidget(self.auto_restart_chk)
+        toggles_row.addWidget(QtWidgets.QLabel("Tema"))
+        toggles_row.addWidget(self.theme_toggle)
+        toggles_row.addStretch()
+        base_layout.addLayout(toggles_row)
+
+        self.log_text = QtWidgets.QPlainTextEdit()
+        self.log_text.setReadOnly(True)
+        self.log_text.setFixedHeight(170)
+        base_layout.addWidget(self.log_text)
+
+        util_box = QtWidgets.QHBoxLayout()
+        open_log_btn = QtWidgets.QPushButton("Apri log")
+        open_log_btn.clicked.connect(lambda: self._open_path(self.paths.log_file))
+        open_backup_btn = QtWidgets.QPushButton("Cartella backup")
+        open_backup_btn.clicked.connect(self._open_backup_dir)
+        clear_log_btn = QtWidgets.QPushButton("Pulisci log")
+        clear_log_btn.clicked.connect(self.log_text.clear)
+        about_btn = QtWidgets.QPushButton("About")
+        about_btn.clicked.connect(self._show_about)
+        util_box.addWidget(open_log_btn)
+        util_box.addWidget(open_backup_btn)
+        util_box.addWidget(clear_log_btn)
+        util_box.addWidget(about_btn)
+        util_box.addStretch()
+        base_layout.addLayout(util_box)
+
+        bottom = QtWidgets.QHBoxLayout()
+        self.progress = QtWidgets.QProgressBar()
+        self.progress.setMinimum(0)
+        self.progress.setMaximum(1)
+        self.progress.setValue(0)
+        bottom.addWidget(self.progress, 1)
+        self.status = QtWidgets.QLabel("Pronto")
+        self.status.setObjectName("statusChip")
+        bottom.addWidget(self.status)
+        base_layout.addLayout(bottom)
+        self._set_status("Pronto")
+
+        adv_tab = QtWidgets.QWidget()
+        adv_layout = QtWidgets.QVBoxLayout(adv_tab)
+        adv_layout.setSpacing(8)
+
+        network_box = QtWidgets.QGroupBox("Rete e download")
         net_layout = QtWidgets.QGridLayout(network_box)
         self.proxy_edit = QtWidgets.QLineEdit()
         self.proxy_edit.setPlaceholderText("http://user:pass@host:port")
-        net_layout.addWidget(QtWidgets.QLabel("Proxy (opzionale)"), 0, 0)
+        net_layout.addWidget(QtWidgets.QLabel("Proxy"), 0, 0)
         net_layout.addWidget(self.proxy_edit, 0, 1)
         self.timeout_spin = QtWidgets.QSpinBox()
         self.timeout_spin.setRange(5, 90)
@@ -228,43 +233,8 @@ class MainWindow(QtWidgets.QMainWindow):
         self.test_net_btn.clicked.connect(self.test_network)
         net_layout.addWidget(self.apply_net_btn, 3, 0)
         net_layout.addWidget(self.test_net_btn, 3, 1)
-        layout.addWidget(network_box)
+        adv_layout.addWidget(network_box)
         self.network_box = network_box
-
-        # Log area
-        self.log_text = QtWidgets.QPlainTextEdit()
-        self.log_text.setReadOnly(True)
-        layout.addWidget(self.log_text, 1)
-
-        # Progress + status
-        bottom = QtWidgets.QHBoxLayout()
-        self.progress = QtWidgets.QProgressBar()
-        self.progress.setMinimum(0)
-        self.progress.setMaximum(1)
-        self.progress.setValue(0)
-        bottom.addWidget(self.progress, 1)
-        self.status = QtWidgets.QLabel("Pronto")
-        self.status.setObjectName("statusChip")
-        bottom.addWidget(self.status)
-        layout.addLayout(bottom)
-        self._set_status("Pronto")
-
-        # Utility buttons
-        basic_util = QtWidgets.QHBoxLayout()
-        open_log_btn = QtWidgets.QPushButton("Apri log")
-        open_log_btn.clicked.connect(lambda: self._open_path(self.paths.log_file))
-        open_backup_btn = QtWidgets.QPushButton("Apri cartella backup")
-        open_backup_btn.clicked.connect(self._open_backup_dir)
-        clear_log_btn = QtWidgets.QPushButton("Pulisci log")
-        clear_log_btn.clicked.connect(self.log_text.clear)
-        about_btn = QtWidgets.QPushButton("About")
-        about_btn.clicked.connect(self._show_about)
-        basic_util.addWidget(open_log_btn)
-        basic_util.addWidget(open_backup_btn)
-        basic_util.addWidget(clear_log_btn)
-        basic_util.addWidget(about_btn)
-        basic_util.addStretch()
-        layout.addLayout(basic_util)
 
         adv_util_box = QtWidgets.QHBoxLayout()
         open_cfg_btn = QtWidgets.QPushButton("Apri config")
@@ -277,94 +247,101 @@ class MainWindow(QtWidgets.QMainWindow):
         open_profile_btn.clicked.connect(self._open_profile_dir)
         open_userjs_btn = QtWidgets.QPushButton("Apri user.js")
         open_userjs_btn.clicked.connect(self._open_userjs)
+        repo_btn = QtWidgets.QPushButton("Betterfox GitHub")
+        repo_btn.clicked.connect(lambda: webbrowser.open("https://github.com/yokoffing/Betterfox"))
+        changelog_btn = QtWidgets.QPushButton("Changelog locale")
+        changelog_btn.clicked.connect(lambda: self._open_path(Path("CHANGELOG.md").resolve()))
         adv_util_box.addWidget(open_cfg_btn)
         adv_util_box.addWidget(open_data_btn)
         adv_util_box.addWidget(release_btn)
         adv_util_box.addWidget(open_profile_btn)
         adv_util_box.addWidget(open_userjs_btn)
+        adv_util_box.addWidget(repo_btn)
+        adv_util_box.addWidget(changelog_btn)
         adv_util_box.addStretch()
-        adv_container = QtWidgets.QWidget()
-        adv_container.setLayout(adv_util_box)
-        layout.addWidget(adv_container)
-        self.advanced_container = adv_container
+        adv_layout.addLayout(adv_util_box)
+
+        tabs.addTab(base_tab, "Base")
+        tabs.addTab(adv_tab, "Avanzate")
+        layout.addWidget(tabs)
 
     def _apply_stylesheet(self):
         self.setStyleSheet(
             f"""
             QWidget {{
-                background-color: #0b1220;
-                color: #e7eaf2;
-                font-family: "Segoe UI", "Segoe UI Variable", "Inter", sans-serif;
+                background-color: #0f141b;
+                color: #ecf0f6;
+                font-family: "Segoe UI", "Inter", sans-serif;
                 font-size: 13px;
             }}
             QGroupBox {{
-                border: 1px solid #1f2737;
+                border: 1px solid #1e2530;
                 border-radius: 12px;
-                margin-top: 12px;
-                padding-top: 16px;
-                background-color: #0f172a;
+                margin-top: 10px;
+                padding-top: 14px;
+                background-color: #121926;
             }}
             QGroupBox::title {{
                 subcontrol-origin: margin;
                 left: 12px;
                 padding: 0 4px;
-                color: #9fb3ff;
+                color: #8eddd7;
                 font-weight: 600;
             }}
             QPushButton {{
-                padding: 9px 14px;
+                padding: 8px 12px;
                 border-radius: 10px;
-                border: 1px solid #1f2737;
-                background-color: #121a2b;
-                color: #e7eaf2;
+                border: 1px solid #1e2530;
+                background-color: #131a27;
+                color: #ecf0f6;
             }}
             QPushButton:hover {{
-                border-color: rgba(91,140,255,0.6);
-                background-color: rgba(91,140,255,0.12);
+                border-color: rgba(74,208,200,0.6);
+                background-color: rgba(74,208,200,0.12);
             }}
             QPushButton[class="primary"] {{
                 background-color: {self.accent};
-                color: #0b1220;
+                color: #0f141b;
                 border: none;
                 font-weight: 600;
             }}
             QPushButton[class="primary"]:hover {{
-                background-color: #6b9cff;
+                background-color: #5fe2d9;
             }}
             QLineEdit, QComboBox, QSpinBox {{
-                padding: 8px 10px;
+                padding: 7px 9px;
                 border-radius: 10px;
-                border: 1px solid #1f2737;
-                background-color: #0f1627;
+                border: 1px solid #1e2530;
+                background-color: #121a27;
                 selection-background-color: {self.accent};
-                selection-color: #0b1220;
+                selection-color: #0f141b;
             }}
             QPlainTextEdit {{
-                background-color: #0a101d;
-                color: #e7eaf2;
+                background-color: #0d121c;
+                color: #ecf0f6;
                 border-radius: 12px;
-                border: 1px solid #1f2737;
+                border: 1px solid #1e2530;
                 padding: 8px;
             }}
             #heroCard {{
                 background: qlineargradient(x1:0, y1:0, x2:1, y2:1,
-                    stop:0 rgba(91,140,255,0.18),
-                    stop:1 rgba(16,24,40,0.95));
-                border: 1px solid rgba(91,140,255,0.35);
+                    stop:0 rgba(74,208,200,0.18),
+                    stop:1 rgba(18,25,38,0.95));
+                border: 1px solid rgba(74,208,200,0.35);
                 border-radius: 14px;
-                padding: 16px;
+                padding: 14px;
             }}
             #statusChip {{
                 padding: 6px 12px;
                 border-radius: 10px;
-                background-color: rgba(91,140,255,0.12);
-                color: #e7eaf2;
+                background-color: rgba(74,208,200,0.12);
+                color: #ecf0f6;
                 font-weight: 600;
             }}
             QProgressBar {{
-                border: 1px solid #1f2737;
+                border: 1px solid #1e2530;
                 border-radius: 8px;
-                background: #0f1627;
+                background: #121926;
                 text-align: center;
             }}
             QProgressBar::chunk {{
@@ -399,8 +376,6 @@ class MainWindow(QtWidgets.QMainWindow):
         else:
             palette = QtWidgets.QApplication.style().standardPalette()
         QtWidgets.QApplication.instance().setPalette(palette)
-        # nascondi avanzate di default alla partenza per vista compatta
-        self._toggle_advanced(self.advanced_toggle.isChecked())
 
     def _load_settings(self):
         self.profile_edit.setText(self.settings.get("profile_path", ""))
@@ -532,14 +507,6 @@ class MainWindow(QtWidgets.QMainWindow):
                 subprocess.Popen(["open", str(path)])
             else:
                 subprocess.Popen(["xdg-open", str(path)])
-
-    def _toggle_advanced(self, visible: bool):
-        if hasattr(self, "advanced_container"):
-            self.advanced_container.setVisible(visible)
-        if hasattr(self, "network_box"):
-            self.network_box.setVisible(visible)
-        label = "Mostra opzioni avanzate" if not visible else "Nascondi opzioni avanzate"
-        self.advanced_toggle.setText(label)
 
     def _show_about(self):
         text = (

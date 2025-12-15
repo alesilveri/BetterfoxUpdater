@@ -9,6 +9,8 @@
 - Aggiunta guida `AGENT.md` per mantenere contesto, routine e checklist release.
 - Utilità rapide aggiuntive: apri profilo/user.js, pulisci log, la combo profili aggiorna il percorso selezionato.
 - About dialog in UI e badge stato colorato; controllo spazio libero prima dei backup con log di warning.
+- Script di build aggiornato per PyInstaller 6.17 (percorsi `--add-data` corretti) e build one-file verificata in `release_app/`.
+- Fix crash all’avvio: l’area log ora è inizializzata prima dei pulsanti utilità (clear log).
 
 ## 3.0.0
 - Nuova UI con layout a schede, status live e barra di avanzamento.

@@ -27,10 +27,10 @@ IF EXIST "%RELEASE%" RMDIR /S /Q "%RELEASE%"
 
 echo [5] Lancio PyInstaller (onefile, windowed)...
 IF EXIST "app\resources\betterfox.ico" (
-    pyinstaller --onefile --windowed --name "BetterfoxUpdater" --workpath "%BUILD%" --distpath "%DIST%" --icon "app\resources\betterfox.ico" --add-data "app\resources;app/resources" app\main.py > build_log.txt 2>&1
+    pyinstaller --onefile --windowed --name "BetterfoxUpdater" --workpath "%BUILD%" --distpath "%DIST%" --icon "app\resources\betterfox.ico" --add-data "app\resources:app/resources" app\main.py > build_log.txt 2>&1
 ) ELSE (
     echo - Icona non trovata, procedo senza.
-    pyinstaller --onefile --windowed --name "BetterfoxUpdater" --workpath "%BUILD%" --distpath "%DIST%" --add-data "app\resources;app/resources" app\main.py > build_log.txt 2>&1
+    pyinstaller --onefile --windowed --name "BetterfoxUpdater" --workpath "%BUILD%" --distpath "%DIST%" --add-data "app\resources:app/resources" app\main.py > build_log.txt 2>&1
 )
 IF %ERRORLEVEL% NEQ 0 (
     echo Build fallita, vedi build_log.txt
