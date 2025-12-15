@@ -255,6 +255,8 @@ class MainWindow(QtWidgets.QMainWindow):
         open_userjs_btn.clicked.connect(self._open_userjs)
         clear_log_btn = QtWidgets.QPushButton("Pulisci log")
         clear_log_btn.clicked.connect(self.log_text.clear)
+        about_btn = QtWidgets.QPushButton("About")
+        about_btn.clicked.connect(self._show_about)
         util_layout.addWidget(open_log_btn)
         util_layout.addWidget(open_cfg_btn)
         util_layout.addWidget(open_backup_btn)
@@ -263,6 +265,7 @@ class MainWindow(QtWidgets.QMainWindow):
         util_layout.addWidget(open_profile_btn)
         util_layout.addWidget(open_userjs_btn)
         util_layout.addWidget(clear_log_btn)
+        util_layout.addWidget(about_btn)
         util_layout.addStretch()
         layout.addLayout(util_layout)
 
@@ -388,6 +391,15 @@ class MainWindow(QtWidgets.QMainWindow):
     @QtCore.Slot(str)
     def _set_status(self, msg: str):
         self.status.setText(msg)
+        lower = msg.lower()
+        if "errore" in lower or "[err" in lower:
+            self.status.setStyleSheet("background-color: rgba(200,70,70,0.25); color: white;")
+        elif "ok" in lower or "aggiornato" in lower:
+            self.status.setStyleSheet("background-color: rgba(60,180,90,0.3); color: white;")
+        elif "warn" in lower or "!" in lower:
+            self.status.setStyleSheet("background-color: rgba(220,170,70,0.25); color: white;")
+        else:
+            self.status.setStyleSheet("background-color: rgba(79,140,245,0.12); color: white;")
 
     def _on_theme_change(self, text: str):
         val = text.lower()
@@ -450,6 +462,13 @@ class MainWindow(QtWidgets.QMainWindow):
             else:
                 subprocess.Popen(["xdg-open", str(path)])
 
+    def _show_about(self):
+        text = (
+            f"<b>Betterfox Updater</b> v{APP_VERSION}<br>"
+            "Aggiorna user.js Betterfox con backup e controlli versioni.<br><br>"
+            "<a href='https://github.com/alesilveri/BetterfoxUpdater'>Repository</a>"
+        )
+        QtWidgets.QMessageBox.about(self, "About", text)
     def apply_network_settings(self):
         proxy = self.proxy_edit.text().strip()
         timeout = self.timeout_spin.value()

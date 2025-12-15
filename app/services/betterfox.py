@@ -267,6 +267,10 @@ class BetterfoxService:
 
     def backup_profile(self, profile: Path, dest: Path, compress: bool, retention_days: int, log: Callable[[str], None]):
         dest.mkdir(parents=True, exist_ok=True)
+        size = self._profile_size(profile)
+        free_bytes = self._free_bytes(dest)
+        if free_bytes < size * 1.2:
+            log(f"[warn] Spazio libero limitato ({free_bytes//(1024*1024)} MB) vs profilo ({size//(1024*1024)} MB)")
         ts = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
         target = dest / f"profile_backup_{ts}"
         log(f"[backup] In corso -> {target}")
@@ -310,6 +314,21 @@ class BetterfoxService:
                     shutil.rmtree(item)
                 else:
                     item.unlink(missing_ok=True)
+
+    def _profile_size(self, profile: Path) -> int:
+        total = 0
+        for p in profile.rglob("*"):
+            if p.is_file():
+                try:
+                    total += p.stat().st_size
+                except OSError:
+                    continue
+        return total
+
+    def _free_bytes(self, path: Path) -> int:
+        import shutil
+        usage = shutil.disk_usage(path)
+        return usage.free
 
     def launch_firefox(self):
         cmd = ["firefox"]

@@ -8,6 +8,7 @@
 - Build/CLI invariati; versione applicazione aggiornata a 4.2.0.
 - Aggiunta guida `AGENT.md` per mantenere contesto, routine e checklist release.
 - Utilità rapide aggiuntive: apri profilo/user.js, pulisci log, la combo profili aggiorna il percorso selezionato.
+- About dialog in UI e badge stato colorato; controllo spazio libero prima dei backup con log di warning.
 
 ## 3.0.0
 - Nuova UI con layout a schede, status live e barra di avanzamento.
