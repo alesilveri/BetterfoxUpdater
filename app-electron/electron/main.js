@@ -8,7 +8,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const isDev = process.env.NODE_ENV === "development";
 const USERJS_URL = "https://raw.githubusercontent.com/yokoffing/Betterfox/main/user.js";
 const COMMITS_URL = "https://api.github.com/repos/yokoffing/Betterfox/commits?path=user.js&per_page=1";
-const APP_ID = "com.betterfox.updater";
+const APP_ID = "com.betterfox.companion";
 const ICON_PATH = join(__dirname, "icon.ico");
 
 function fetchText(url) {
@@ -102,7 +102,7 @@ async function getRemoteMeta() {
 }
 
 function createWindow() {
-  app.setName("Betterfox Updater");
+  app.setName("Betterfox Companion");
   app.setAppUserModelId(APP_ID);
 
   const win = new BrowserWindow({
@@ -110,7 +110,7 @@ function createWindow() {
     height: 720,
     minWidth: 960,
     minHeight: 640,
-    title: "Betterfox Updater",
+    title: "Betterfox Companion",
     backgroundColor: "#0c1116",
     icon: ICON_PATH,
     webPreferences: {

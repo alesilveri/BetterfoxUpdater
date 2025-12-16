@@ -23,8 +23,8 @@ npm run build
 Trovi i binari in `app-electron/release/` (configurato con electron-builder).
 
 ## Versioni e release
-- Versione Electron corrente: `1.0.2` (vedi `CHANGELOG.md`).
-- Usa `npm version <patch|minor|major> --no-git-tag-version`, poi `npm run build` e `git push && git push --tags` per allineare la repo e preparare la release GitHub.
+- Versione Electron corrente: `1.0.0` (vedi `CHANGELOG.md`).
+- Per ora niente release pubblica: testiamo in locale (`npm run dev` / `npm run build`) finche tutto gira senza schermo nero.
 - Il canale Python e legacy in `archive/python-legacy/` (tenuto solo come riferimento).
 
 ## Note

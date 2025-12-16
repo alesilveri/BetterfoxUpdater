@@ -20,5 +20,5 @@ UI moderna per aggiornare `user.js` di Betterfox: controlla versione locale/remo
 
 ## Note
 - Chiudi Firefox prima di aggiornare o fare backup.
-- Versione corrente: `1.0.2` (vedi changelog a repo root).
+- Versione corrente: `1.0.0` (vedi changelog a repo root).
 - Il percorso Python e legacy in `archive/python-legacy/`; lo sviluppo attivo e qui.
