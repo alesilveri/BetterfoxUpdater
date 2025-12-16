@@ -12,27 +12,18 @@
 </defs>
 <rect width="1200" height="360" rx="26" fill="url(#bg)"/>
 <rect x="12" y="12" width="1176" height="336" rx="24" fill="url(#glow)" stroke="rgba(90,118,148,0.35)" stroke-width="2"/>
-<circle cx="190" cy="90" r="120" fill="#4EEBC3" fill-opacity="0.16"/>
-<circle cx="1020" cy="280" r="150" fill="#4EEBC3" fill-opacity="0.12"/>
+<circle cx="190" cy="100" r="120" fill="#4EEBC3" fill-opacity="0.16"/>
+<circle cx="1020" cy="260" r="150" fill="#4EEBC3" fill-opacity="0.12"/>
 
 <!-- Logo -->
-<g transform="translate(76 82) scale(0.9)">
-  <circle cx="120" cy="120" r="110" fill="#1b2737"/>
-  <circle cx="120" cy="120" r="88" fill="#080c12"/>
-  <path d="M165 55 C190 80 205 115 195 150 C185 185 150 210 115 205 L145 165 L135 145 L175 115 Z" fill="#4EEBC3"/>
-  <circle cx="120" cy="110" r="55" fill="#2ED3A5"/>
-  <polygon points="102,82 120,58 126,88" fill="#4EEBC3"/>
-  <polygon points="136,70 152,50 156,80" fill="#4EEBC3"/>
-  <path d="M128 118 A24 24 0 0 1 148 132 Q140 140 130 136 Z" fill="#080c12"/>
-  <circle cx="120" cy="120" r="78" stroke="#4EEBC3" stroke-opacity="0.45" stroke-width="4" fill="none"/>
-</g>
+<image href="icon.png" x="70" y="60" height="180" width="180" />
 
-<text x="260" y="150" fill="#f4f7fb" font-family="Inter, 'Segoe UI', sans-serif" font-size="48" font-weight="800">Betterfox Updater</text>
-<text x="260" y="195" fill="#8ea2bb" font-family="Inter, 'Segoe UI', sans-serif" font-size="22" font-weight="500">Aggiorna user.js Betterfox con backup chiari e sicuri.</text>
+<text x="280" y="150" fill="#f4f7fb" font-family="Inter, 'Segoe UI', sans-serif" font-size="48" font-weight="800">Betterfox Updater</text>
+<text x="280" y="195" fill="#8ea2bb" font-family="Inter, 'Segoe UI', sans-serif" font-size="22" font-weight="500">Aggiorna user.js Betterfox con backup chiari e sicuri.</text>
 
-<rect x="260" y="230" width="260" height="48" rx="14" fill="#4EEBC3"/>
-<text x="295" y="262" fill="#08100d" font-family="Inter, 'Segoe UI', sans-serif" font-size="18" font-weight="800">Scarica l'ultima release</text>
-<rect x="540" y="230" width="260" height="48" rx="14" fill="rgba(78,235,195,0.12)" stroke="#4EEBC3" stroke-width="1.4"/>
-<text x="575" y="262" fill="#cde7df" font-family="Inter, 'Segoe UI', sans-serif" font-size="18" font-weight="700">Backup profilo sicuro</text>
-<text x="260" y="118" fill="#4EEBC3" font-family="Inter, 'Segoe UI', sans-serif" font-size="18" font-weight="700">Companion per Betterfox</text>
+<rect x="280" y="230" width="260" height="48" rx="14" fill="#4EEBC3"/>
+<text x="315" y="262" fill="#08100d" font-family="Inter, 'Segoe UI', sans-serif" font-size="18" font-weight="800">Scarica l'ultima release</text>
+<rect x="560" y="230" width="260" height="48" rx="14" fill="rgba(78,235,195,0.12)" stroke="#4EEBC3" stroke-width="1.4"/>
+<text x="595" y="262" fill="#cde7df" font-family="Inter, 'Segoe UI', sans-serif" font-size="18" font-weight="700">Backup profilo sicuro</text>
+<text x="280" y="118" fill="#4EEBC3" font-family="Inter, 'Segoe UI', sans-serif" font-size="18" font-weight="700">Companion per Betterfox</text>
 </svg>
