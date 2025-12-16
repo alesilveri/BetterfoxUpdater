@@ -10,6 +10,13 @@ dist_app/
 release_app/
 *.spec
 
+# Node / Electron
+app-electron/node_modules/
+app-electron/dist/
+app-electron/release/
+app-electron/.vite/
+app-electron/*.log
+
 # Logs / runtime
 *.log
 error.log

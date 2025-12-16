@@ -1,48 +1,29 @@
-# Betterfox Updater (desktop app)
+# Betterfox Updater
 
-Aggiorna Betterfox (user.js) in un click, con backup di sicurezza e controlli di versione. Pensata per uso personale, semplice da usare, pronta al rilascio.
+![banner](app-electron/public/banner.svg)
 
-## Cosa fa (in breve)
-- Scarica l’ultimo `user.js` Betterfox e mostra versione locale/remota/ultimo commit.
-- Backup automatico del profilo (zip opzionale, retention) con avviso se lo spazio è poco.
-- Riavvio Firefox opzionale dopo l’update.
-- Tema System/Light/Dark, badge di stato colorati, tray con toast per esiti.
-- Rete configurabile (proxy/timeout/retry) e test download integrato.
-- Utility rapide: apri log, config, backup, profilo, `user.js`, cartella dati/release, pulisci log, About.
-- Modalità headless: `python -m app --update --profile <path> --backup <path> [--no-backup] [--no-restart]`.
+App desktop (Electron + React) per tenere `user.js` di Betterfox sempre allineato: UI compatta, backup sicuri, percorsi chiari. Tema System/Light/Dark.
 
-## Come si usa (GUI)
-1. Avvia `python -m app` (oppure l’exe buildata).
-2. Seleziona il profilo Firefox (rilevato automaticamente se possibile).
-3. (Facoltativo) scegli cartella backup e opzioni (zip, retention).
-4. Premi **Aggiorna**. Segui la barra di avanzamento e il badge di stato.
+## Cosa c’è dentro
+- Controllo versioni: locale, remoto e ultimo commit Betterfox.
+- Aggiorna `user.js` con backup automatico opzionale e retention giorni.
+- Rilevamento profili Firefox, scelta cartella backup, link rapidi a repo/changelog.
+- Tema System/Light/Dark, log leggibile, azioni rapide senza fronzoli.
 
-## Setup rapido (sviluppo)
+## Uso rapido
+1) `cd app-electron && npm install`  
+2) Dev: `npm run dev` (parte Vite + Electron)  
+3) In app: scegli profilo Firefox, cartella backup, premi **Aggiorna Betterfox**.  
+
+## Build
 ```bash
-python -m pip install -r requirements.txt
-python -m app
+cd app-electron
+npm run build
 ```
+Trovi i binari in `app-electron/release/` (configurato con electron-builder).
 
-## Build locale (exe Windows)
-```bat
-build_app.bat
-```
-Troverai `release_app/BetterfoxUpdater.exe` (usa l’icona se presente in `app/resources/betterfox.ico`).
-
-## CI/CD già pronta
-- `.github/workflows/lint.yml`: py_compile su push/PR.
-- `.github/workflows/windows-build.yml`: workflow manuale → exe come artifact.
-- `.github/workflows/release.yml`: workflow manuale con input `version` → bozza release con exe allegata.
-
-## Dove salva i dati
-- Config/log: `%LOCALAPPDATA%/BetterfoxUpdater/` (`config.ini`, `error.log`)
-- Backup: `%LOCALAPPDATA%/BetterfoxUpdater/backups` (di default)
-- Template config: `app/resources/config_template.ini`
-
-## Strumenti
-- `tools/bump_version.py <version> --title "nota"` aggiorna `APP_VERSION` e aggiunge la sezione al changelog.
-
-## Backlog (idee vicine)
-- Scheduler per aggiornamenti automatici (Attività pianificata).
-- Auto-update app (check remoto e notifica).
-- Installer NSIS/MSI sopra l’exe PyInstaller.
+## Note
+- Richiede Firefox chiuso per copiare/scrivere `user.js`.
+- I dati (config/log) sono gestiti da Electron: i backup restano dove li imposti tu.
+- La vecchia UI Python è mantenuta in `app/` ma considerata legacy; lo sviluppo attivo è su `app-electron/`.
+- Progetto personale: UI pensata per essere semplice, niente funzioni superflue. Titoli e testi sono chiari per chi non è tecnico.

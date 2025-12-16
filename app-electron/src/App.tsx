@@ -1,0 +1,307 @@
+import './theme.css';
+
+import { useCallback, useEffect, useMemo, useState } from 'react';
+
+type Stat = { label: string; value: string; tone?: 'ok' | 'warn' | 'err' };
+
+const STAT_TEMPLATE: Stat[] = [
+  { label: 'Locale', value: 'n/d' },
+  { label: 'Remoto', value: 'n/d' },
+  { label: 'GitHub', value: 'n/d' },
+  { label: 'Firefox', value: 'n/d' },
+];
+
+const formatErr = (err: unknown) => (err instanceof Error ? err.message : String(err));
+
+function Pill({ stat }: { stat: Stat }) {
+  return (
+    <div className="pill">
+      <span className="pill-label">{stat.label}</span>
+      <span className={`pill-value ${stat.tone ?? ''}`}>{stat.value}</span>
+    </div>
+  );
+}
+
+function App() {
+  const [profilePath, setProfilePath] = useState('');
+  const [profiles, setProfiles] = useState<{ name: string; path: string }[]>([]);
+  const [backupPath, setBackupPath] = useState('');
+  const [retention, setRetention] = useState(45);
+  const [log, setLog] = useState<string[]>([]);
+  const [progress, setProgress] = useState(0);
+  const [status, setStatus] = useState('Pronto');
+  const [autoBackup, setAutoBackup] = useState(true);
+  const [theme, setTheme] = useState<'light' | 'dark' | 'system'>('system');
+  const [stats, setStats] = useState<Stat[]>(() => [...STAT_TEMPLATE]);
+
+  const heroMeta = useMemo(
+    () => ({
+      title: 'Betterfox Updater',
+      subtitle: 'Aggiorna user.js con un click, backup sicuri e percorsi chiari.',
+    }),
+    []
+  );
+
+  const appendLog = (items: string | string[]) => {
+    const entries = Array.isArray(items) ? items : [items];
+    setLog((prev) => [...entries, ...prev].slice(0, 200));
+  };
+
+  useEffect(() => {
+    const saved = localStorage.getItem('bf-theme');
+    if (saved === 'light' || saved === 'dark' || saved === 'system') setTheme(saved);
+  }, []);
+
+  useEffect(() => {
+    const prefersDark = window.matchMedia?.('(prefers-color-scheme: dark)').matches;
+    const effective = theme === 'dark' || (theme === 'system' && prefersDark) ? 'dark' : 'light';
+    document.documentElement.dataset.theme = effective;
+    localStorage.setItem('bf-theme', theme);
+  }, [theme]);
+
+  useEffect(() => {
+    if (theme !== 'system') return;
+    const mql = window.matchMedia?.('(prefers-color-scheme: dark)');
+    const onChange = () => {
+      const effective = mql?.matches ? 'dark' : 'light';
+      document.documentElement.dataset.theme = effective;
+    };
+    mql?.addEventListener('change', onChange);
+    return () => mql?.removeEventListener('change', onChange);
+  }, [theme]);
+
+  const loadProfiles = useCallback(async () => {
+    try {
+      const found = await window.bf.listProfiles();
+      setProfiles(found);
+      if (!profilePath && found.length > 0) setProfilePath(found[0].path);
+    } catch (err) {
+      appendLog(`[err] Profili: ${formatErr(err)}`);
+    }
+  }, [profilePath]);
+
+  const refreshVersions = useCallback(async () => {
+    setStatus('Controllo versioni…');
+    setProgress(22);
+    try {
+      const res = await window.bf.checkVersions(profilePath || undefined);
+      setStats([
+        { label: 'Locale', value: res.local },
+        { label: 'Remoto', value: res.remote, tone: res.remote !== res.local ? 'ok' : undefined },
+        { label: 'GitHub', value: res.github, tone: res.github !== 'n/d' ? 'ok' : undefined },
+        { label: 'Firefox', value: res.firefox },
+      ]);
+      setStatus('Pronto');
+    } catch (err) {
+      appendLog(`[err] Versioni: ${formatErr(err)}`);
+      setStatus('Errore versioni');
+    } finally {
+      setTimeout(() => setProgress(0), 700);
+    }
+  }, [profilePath]);
+
+  const chooseProfileDir = async () => {
+    const dir = await window.bf.chooseDir();
+    if (dir) setProfilePath(dir);
+  };
+
+  const chooseBackupDir = async () => {
+    const dir = await window.bf.chooseDir();
+    if (dir) setBackupPath(dir);
+  };
+
+  const runBackup = async () => {
+    if (!profilePath || !backupPath) {
+      appendLog('[err] Imposta profilo e cartella backup');
+      setStatus('Dati mancanti');
+      return;
+    }
+    setStatus('Backup in corso.');
+    setProgress(40);
+    const res = await window.bf.backupProfile({ profilePath, destPath: backupPath, retentionDays: retention });
+    appendLog(res.log);
+    setStatus(res.ok ? 'Backup completato' : 'Errore backup');
+    setTimeout(() => setProgress(0), 700);
+  };
+
+  const runUpdate = async () => {
+    if (!profilePath) {
+      appendLog('[err] Profilo non impostato');
+      setStatus('Dati mancanti');
+      return;
+    }
+    setStatus('Aggiornamento.');
+    setProgress(28);
+    if (autoBackup && backupPath) {
+      const bk = await window.bf.backupProfile({ profilePath, destPath: backupPath, retentionDays: retention });
+      appendLog(bk.log);
+    } else if (autoBackup) {
+      appendLog('[warn] Backup saltato: cartella non configurata');
+    }
+    const res = await window.bf.updateBetterfox({ profilePath });
+    appendLog(res.log);
+    if (res.version) {
+      setStats((prev) => prev.map((s) => (s.label === 'Locale' ? { ...s, value: res.version! } : s)));
+    }
+    setStatus(res.ok ? 'Aggiornato' : 'Errore update');
+    setTimeout(() => setProgress(0), 700);
+  };
+
+  const openPathSafe = async (path?: string) => {
+    if (!path) {
+      appendLog('[err] Percorso non disponibile');
+      return;
+    }
+    await window.bf.openPath(path);
+  };
+
+  useEffect(() => {
+    loadProfiles();
+    refreshVersions();
+  }, [loadProfiles, refreshVersions]);
+
+  const quickActions = [
+    { label: 'Aggiorna Betterfox', tone: 'primary', onClick: runUpdate },
+    { label: 'Backup profilo', tone: 'ghost', onClick: runBackup },
+    { label: 'Controlla versioni', tone: 'ghost', onClick: refreshVersions },
+  ];
+
+  const links = [
+    { label: 'Cartella backup', onClick: () => openPathSafe(backupPath) },
+    { label: 'Apri profilo', onClick: () => openPathSafe(profilePath) },
+    { label: 'Apri user.js', onClick: () => openPathSafe(profilePath ? `${profilePath}\\user.js` : '') },
+    { label: 'Betterfox GitHub', onClick: () => window.bf.openUrl('https://github.com/yokoffing/Betterfox') },
+    { label: 'Release Betterfox', onClick: () => window.bf.openUrl('https://github.com/yokoffing/Betterfox/releases') },
+    { label: 'Changelog Betterfox', onClick: () => window.bf.openUrl('https://github.com/yokoffing/Betterfox/blob/main/CHANGELOG.md') },
+  ];
+
+  return (
+    <div className="page">
+      <header className="hero">
+        <div className="hero-text">
+          <div className="eyebrow">Betterfox companion</div>
+          <h1>{heroMeta.title}</h1>
+          <p className="muted">{heroMeta.subtitle}</p>
+          <div className="hero-actions">
+            <button className="btn primary" onClick={runUpdate}>Aggiorna ora</button>
+            <button className="btn ghost" onClick={() => window.bf.openUrl('https://github.com/yokoffing/Betterfox')}>Repo Betterfox</button>
+          </div>
+        </div>
+        <div className="hero-panel">
+          <div className="status-chip large">{status}</div>
+          <div className="theme-toggle">
+            <span>Tema</span>
+            <div className="toggle-buttons">
+              <button className={theme === 'system' ? 'active' : ''} onClick={() => setTheme('system')}>Sistema</button>
+              <button className={theme === 'light' ? 'active' : ''} onClick={() => setTheme('light')}>Light</button>
+              <button className={theme === 'dark' ? 'active' : ''} onClick={() => setTheme('dark')}>Dark</button>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <section className="card stats">
+        <div className="card-title">Versioni in vista</div>
+        <div className="pill-row">
+          {stats.map((s) => (
+            <Pill key={s.label} stat={s} />
+          ))}
+        </div>
+      </section>
+
+      <main className="grid">
+        <section className="card actions">
+          <div className="card-title">Azioni rapide</div>
+          <div className="actions-row">
+            {quickActions.map((a) => (
+              <button
+                key={a.label}
+                className={`btn ${a.tone === 'primary' ? 'primary' : 'ghost'}`}
+                onClick={a.onClick}
+              >
+                {a.label}
+              </button>
+            ))}
+          </div>
+          <div className="progress subtle">
+            <div className="bar" style={{ width: `${progress}%` }}></div>
+          </div>
+          <div className="hint muted">Suggerimento: usa “Aggiorna Betterfox” con backup automatico attivo.</div>
+        </section>
+
+        <section className="card form">
+          <div className="card-title">Percorsi e backup</div>
+          <div className="form-row">
+            <label>Profilo Firefox</label>
+            <div className="field">
+              <input
+                placeholder="C:\\Utenti\\...\\profile"
+                value={profilePath}
+                onChange={(e) => setProfilePath(e.target.value)}
+              />
+              <button className="btn ghost" onClick={chooseProfileDir}>Sfoglia</button>
+            </div>
+          </div>
+          <div className="form-row">
+            <label>Profili rilevati</label>
+            <div className="field">
+              <select value={profilePath} onChange={(e) => setProfilePath(e.target.value)}>
+                {profiles.length === 0 ? <option value="">Nessun profilo</option> : null}
+                {profiles.map((p) => (
+                  <option key={p.path} value={p.path}>{p.name}</option>
+                ))}
+              </select>
+              <button className="btn ghost" onClick={loadProfiles}>Rileva</button>
+            </div>
+          </div>
+          <div className="form-row">
+            <label>Cartella backup</label>
+            <div className="field">
+              <input
+                placeholder="C:\\BetterfoxUp\\backups"
+                value={backupPath}
+                onChange={(e) => setBackupPath(e.target.value)}
+              />
+              <button className="btn ghost" onClick={chooseBackupDir}>Scegli</button>
+            </div>
+          </div>
+          <div className="form-row two">
+            <div>
+              <label>Retention (giorni)</label>
+              <input type="number" min={7} max={120} value={retention} onChange={(e) => setRetention(Number(e.target.value))} />
+            </div>
+            <div className="toggle-row compact">
+              <label className="inline">
+                <input type="checkbox" checked={autoBackup} onChange={(e) => setAutoBackup(e.target.checked)} /> Backup prima di aggiornare
+              </label>
+            </div>
+          </div>
+        </section>
+
+        <section className="card log">
+          <div className="card-title">Log</div>
+          <div className="log-box">
+            {log.length === 0 ? <div className="muted">Nessun log</div> : log.map((item, idx) => <div key={idx}>{item}</div>)}
+          </div>
+          <div className="actions-row utility">
+            <button className="btn ghost small" onClick={() => setLog([])}>Pulisci log</button>
+            <button className="btn ghost small" onClick={() => openPathSafe(backupPath)}>Apri backup</button>
+            <button className="btn ghost small" onClick={() => openPathSafe(profilePath)}>Apri profilo</button>
+            <button className="btn ghost small" onClick={() => window.bf.openUrl('https://github.com/yokoffing/Betterfox')}>GitHub</button>
+          </div>
+        </section>
+
+        <section className="card links">
+          <div className="card-title">Link veloci</div>
+          <div className="links-grid">
+            {links.map((l) => (
+              <button key={l.label} className="btn ghost small" onClick={l.onClick}>{l.label}</button>
+            ))}
+          </div>
+        </section>
+      </main>
+    </div>
+  );
+}
+
+export default App;
