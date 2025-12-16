@@ -12,19 +12,19 @@
 </defs>
 <rect width="1200" height="360" rx="26" fill="url(#bg)"/>
 <rect x="12" y="12" width="1176" height="336" rx="24" fill="url(#glow)" stroke="rgba(90,118,148,0.35)" stroke-width="2"/>
-<circle cx="190" cy="90" r="120" fill="#63e6c4" fill-opacity="0.12"/>
-<circle cx="1020" cy="280" r="150" fill="#63e6c4" fill-opacity="0.10"/>
+<circle cx="190" cy="90" r="120" fill="#63e6c4" fill-opacity="0.16"/>
+<circle cx="1020" cy="280" r="150" fill="#63e6c4" fill-opacity="0.12"/>
 
 <!-- Logo -->
 <g transform="translate(76 82) scale(0.9)">
-  <circle cx="120" cy="120" r="110" fill="#212d3d"/>
-  <circle cx="120" cy="120" r="88" fill="#0b0f16"/>
-  <path d="M165 55 C190 80 205 115 195 150 C185 185 150 210 115 205 L145 165 L135 145 L175 115 Z" fill="#63e6c4"/>
-  <circle cx="120" cy="110" r="55" fill="#3fcfa9"/>
-  <polygon points="102,82 120,58 126,88" fill="#63e6c4"/>
-  <polygon points="136,70 152,50 156,80" fill="#63e6c4"/>
-  <path d="M128 118 A24 24 0 0 1 148 132 Q140 140 130 136 Z" fill="#0b0f16"/>
-  <circle cx="120" cy="120" r="78" stroke="#63e6c4" stroke-opacity="0.4" stroke-width="4" fill="none"/>
+  <circle cx="120" cy="120" r="110" fill="#1b2737"/>
+  <circle cx="120" cy="120" r="88" fill="#080c12"/>
+  <path d="M165 55 C190 80 205 115 195 150 C185 185 150 210 115 205 L145 165 L135 145 L175 115 Z" fill="#36ebb2"/>
+  <circle cx="120" cy="110" r="55" fill="#22c496"/>
+  <polygon points="102,82 120,58 126,88" fill="#36ebb2"/>
+  <polygon points="136,70 152,50 156,80" fill="#36ebb2"/>
+  <path d="M128 118 A24 24 0 0 1 148 132 Q140 140 130 136 Z" fill="#080c12"/>
+  <circle cx="120" cy="120" r="78" stroke="#36ebb2" stroke-opacity="0.45" stroke-width="4" fill="none"/>
 </g>
 
 <text x="260" y="150" fill="#f4f7fb" font-family="Inter, 'Segoe UI', sans-serif" font-size="48" font-weight="800">Betterfox Updater</text>
