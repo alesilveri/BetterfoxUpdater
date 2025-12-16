@@ -1,29 +1,73 @@
 <svg width="1200" height="360" viewBox="0 0 1200 360" fill="none" xmlns="http://www.w3.org/2000/svg">
-<defs>
-  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-    <stop offset="0%" stop-color="#0b0f16"/>
-    <stop offset="100%" stop-color="#05080e"/>
-  </linearGradient>
-  <linearGradient id="glow" x1="0" y1="0" x2="1" y2="1">
-    <stop offset="0%" stop-color="#63e6c4" stop-opacity="0.25"/>
-    <stop offset="60%" stop-color="#304056" stop-opacity="0.4"/>
-    <stop offset="100%" stop-color="#0b0f16" stop-opacity="0.8"/>
-  </linearGradient>
-</defs>
-<rect width="1200" height="360" rx="26" fill="url(#bg)"/>
-<rect x="12" y="12" width="1176" height="336" rx="24" fill="url(#glow)" stroke="rgba(90,118,148,0.35)" stroke-width="2"/>
-<circle cx="190" cy="100" r="120" fill="#4EEBC3" fill-opacity="0.16"/>
-<circle cx="1020" cy="260" r="150" fill="#4EEBC3" fill-opacity="0.12"/>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#05070d" />
+      <stop offset="100%" stop-color="#0a1424" />
+    </linearGradient>
+    <linearGradient id="panel" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="rgba(99,230,196,0.18)" />
+      <stop offset="100%" stop-color="rgba(17,26,36,0.92)" />
+    </linearGradient>
+    <linearGradient id="cta" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#5ef0cc" />
+      <stop offset="100%" stop-color="#2dcaa4" />
+    </linearGradient>
+    <linearGradient id="ghost" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="rgba(94,240,204,0.12)" />
+      <stop offset="100%" stop-color="rgba(45,202,164,0.28)" />
+    </linearGradient>
+    <radialGradient id="halo" cx="0.18" cy="0.2" r="1">
+      <stop offset="0%" stop-color="#63e6c4" stop-opacity="0.35" />
+      <stop offset="100%" stop-color="rgba(6,10,16,0)" />
+    </radialGradient>
+    <linearGradient id="fire" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffb347" />
+      <stop offset="100%" stop-color="#ff4e6a" />
+    </linearGradient>
+    <linearGradient id="fireInner" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffe7a3" />
+      <stop offset="100%" stop-color="#ff9354" />
+    </linearGradient>
+    <linearGradient id="arc" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#5ef0cc" />
+      <stop offset="100%" stop-color="#2dcaa4" />
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="360" rx="26" fill="url(#bg)" />
+  <rect x="12" y="12" width="1176" height="336" rx="24" fill="url(#panel)" stroke="rgba(90,118,148,0.35)" stroke-width="2" />
+  <rect width="1200" height="360" rx="26" fill="url(#halo)" />
 
-<!-- Logo -->
-<image href="icon.png" x="70" y="60" height="180" width="180" />
+  <g opacity="0.35">
+    <circle cx="160" cy="90" r="120" fill="#4eeac4" />
+    <circle cx="1050" cy="300" r="170" fill="#4eeac4" />
+  </g>
 
-<text x="280" y="150" fill="#f4f7fb" font-family="Inter, 'Segoe UI', sans-serif" font-size="48" font-weight="800">Betterfox Updater</text>
-<text x="280" y="195" fill="#8ea2bb" font-family="Inter, 'Segoe UI', sans-serif" font-size="22" font-weight="500">Aggiorna user.js Betterfox con backup chiari e sicuri.</text>
+  <g transform="translate(840 58) scale(0.36)">
+    <circle cx="512" cy="512" r="380" fill="#0c121d" stroke="#133040" stroke-width="16" />
+    <circle cx="512" cy="512" r="350" fill="none" stroke="#1f4e63" stroke-width="10" />
+    <path d="M520 130 L650 260 L630 360 L700 430 L620 540 L660 650 L520 740 L410 660 L360 530 L360 420 L430 350 L420 240 L470 180 Z" fill="url(#fire)" />
+    <path d="M520 210 L610 300 L600 370 L640 440 L570 520 L590 610 L500 660 L430 610 L410 520 L430 450 L480 400 L470 310 Z" fill="url(#fireInner)" />
+    <circle cx="512" cy="512" r="300" fill="none" stroke="url(#arc)" stroke-width="32" stroke-dasharray="720 400" stroke-dashoffset="180" />
+    <circle cx="512" cy="512" r="270" fill="none" stroke="url(#arc)" stroke-width="12" stroke-dasharray="720 420" stroke-dashoffset="180" opacity="0.7" />
+    <polygon points="780,320 846,330 808,390" fill="#5ef0cc" />
+    <circle cx="380" cy="280" r="18" fill="white" fill-opacity="0.3" />
+    <circle cx="640" cy="620" r="16" fill="white" fill-opacity="0.25" />
+    <circle cx="610" cy="230" r="14" fill="white" fill-opacity="0.28" />
+  </g>
 
-<rect x="280" y="230" width="260" height="48" rx="14" fill="#4EEBC3"/>
-<text x="315" y="262" fill="#08100d" font-family="Inter, 'Segoe UI', sans-serif" font-size="18" font-weight="800">Scarica l'ultima release</text>
-<rect x="560" y="230" width="260" height="48" rx="14" fill="rgba(78,235,195,0.12)" stroke="#4EEBC3" stroke-width="1.4"/>
-<text x="595" y="262" fill="#cde7df" font-family="Inter, 'Segoe UI', sans-serif" font-size="18" font-weight="700">Backup profilo sicuro</text>
-<text x="280" y="118" fill="#4EEBC3" font-family="Inter, 'Segoe UI', sans-serif" font-size="18" font-weight="700">Companion per Betterfox</text>
+  <text x="240" y="120" fill="#4eeac4" font-family="Inter, 'Segoe UI', sans-serif" font-size="18" font-weight="700" letter-spacing="0.4">Companion Betterfox</text>
+  <text x="240" y="162" fill="#f4f7fb" font-family="Inter, 'Segoe UI', sans-serif" font-size="46" font-weight="800">Betterfox Updater</text>
+  <text x="240" y="200" fill="#9cb2c9" font-family="Inter, 'Segoe UI', sans-serif" font-size="22" font-weight="500">Aggiorna user.js, backup automatici, percorso chiaro.</text>
+
+  <g fill="none" stroke="#203045" stroke-width="1" stroke-opacity="0.4">
+    <line x1="240" y1="224" x2="680" y2="224" />
+  </g>
+
+  <rect x="240" y="240" width="240" height="48" rx="14" fill="url(#cta)" />
+  <text x="268" y="271" fill="#07100d" font-family="Inter, 'Segoe UI', sans-serif" font-size="18" font-weight="800">Scarica l'ultima release</text>
+
+  <rect x="500" y="240" width="240" height="48" rx="14" fill="url(#ghost)" stroke="#4eeac4" stroke-width="1.2" />
+  <text x="528" y="271" fill="#cde7df" font-family="Inter, 'Segoe UI', sans-serif" font-size="18" font-weight="700">Backup profilo sicuro</text>
+
+  <text x="240" y="306" fill="#8ea2bb" font-family="Inter, 'Segoe UI', sans-serif" font-size="16" font-weight="600">• Tema System/Light/Dark   • Tray pronta   • Log chiari</text>
 </svg>

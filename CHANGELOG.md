@@ -1,12 +1,18 @@
 # Betterfox Updater - Changelog
 
+## 1.0.2 (identity refresh)
+- Icona e banner ridisegnati (fox+freccia) per app, tray e repo; asset SVG inline senza dipendenze esterne.
+- UI piu compatta e dark: hero con stato/progress, percorsi+azioni uniti, log con link essenziali e bottoni piccoli.
+- Tema System/Light/Dark piu chiaro con chip e toggle emoji; pulsanti rapidi per profilo/backup direttamente in hero.
+- Testi README/CHANGELOG ripuliti (ascii), repo Python tenuta in archive come legacy.
+
 ## 1.0.1 (branding)
-- Icona app rifatta (mint scuro, più leggibile) e banner riallineato con CTA chiara.
+- Icona app rinfrescata (mint scuro) e banner riallineato con CTA visibile.
 - Pulizia asset superflui e repo snellita (Python legacy archiviato).
-- Patch di versioning per rilasci futuri (1.0.1).
+- Patch versioning per rilasci successivi.
 
 ## 1.0.0 (Electron)
-- Nuova app Electron (React + Vite) con tema System/Light/Dark e palette dark pi├╣ profonda.
+- Nuova app Electron (React + Vite) con tema System/Light/Dark e palette dark piu profonda.
 - Layout compatto: hero con status, azioni rapide, percorsi/backup essenziali, log e link rapidi senza spazi vuoti.
 - Fetch Betterfox robusto (user agent, ultima data commit GitHub) e write user.js con versione aggiornata.
 - Icona app dedicata (BrowserWindow, build electron-builder) e banner per la repo.
@@ -17,16 +23,16 @@
 - UI rinfrescata con hero card, badge di stato, pulsanti rapidi (cartella dati, release, changelog, repo Betterfox).
 - Sezione rete dedicata: proxy configurabile, timeout e tentativi con applicazione live e test download.
 - Persistenza impostazioni migliorata (backup, compressione, auto-backup/riavvio) e default cartella backup sotto dati app.
-- Gestione percorsi più robusta (apri path solo se esiste) e log/ripristino palette invariato.
+- Gestione percorsi piu robusta (apri path solo se esiste) e log/ripristino palette invariato.
 - Build/CLI invariati; versione applicazione aggiornata a 4.2.0.
-- Aggiunta guida `AGENT.md` per mantenere contesto, routine e checklist release.
-- Utilità rapide aggiuntive: apri profilo/user.js, pulisci log, la combo profili aggiorna il percorso selezionato.
+- Aggiunta guida AGENT.md per mantenere contesto, routine e checklist release.
+- Utility rapide aggiuntive: apri profilo/user.js, pulisci log, la combo profili aggiorna il percorso selezionato.
 - About dialog in UI e badge stato colorato; controllo spazio libero prima dei backup con log di warning.
-- Script di build aggiornato per PyInstaller 6.17 (percorsi `--add-data` corretti) e build one-file verificata in `release_app/`.
-- Fix crash all’avvio: l’area log ora è inizializzata prima dei pulsanti utilità (clear log).
-- UI rinnovata (tab base/avanzate compatti), pulsanti con icone native, chip per versioni, palette più leggibile e log compatto.
+- Script di build aggiornato per PyInstaller 6.17 (percorsi --add-data corretti) e build one-file verificata in release_app/.
+- Fix crash all'avvio: l'area log ora e inizializzata prima dei pulsanti utility (clear log).
+- UI rinnovata (tab base/avanzate compatti), pulsanti con icone native, chip per versioni, palette piu leggibile e log compatto.
 - Layout ridisegnato: colonne base (azioni+percorsi+preferenze a sinistra, log/progress a destra) per evitare tagli e spazi vuoti su finestre piccole.
-- Spaziatura affinata (log più alto, progress sottile, form più stretto) e palette charcoal/mint con bordi soft per una lettura più chiara.
+- Spaziatura affinata (log piu alto, progress sottile, form piu stretto) e palette charcoal/mint con bordi soft per una lettura piu chiara.
 
 ## 3.0.0
 - Nuova UI con layout a schede, status live e barra di avanzamento.

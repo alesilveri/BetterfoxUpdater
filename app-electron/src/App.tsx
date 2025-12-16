@@ -81,7 +81,7 @@ function App() {
   }, [profilePath]);
 
   const refreshVersions = useCallback(async () => {
-    setStatus('Controllo versioni…');
+    setStatus('Controllo versioni...');
     setProgress(22);
     try {
       const res = await window.bf.checkVersions(profilePath || undefined);
@@ -167,12 +167,12 @@ function App() {
   ];
 
   const links = [
-    { label: 'Cartella backup', onClick: () => openPathSafe(backupPath) },
-    { label: 'Apri profilo', onClick: () => openPathSafe(profilePath) },
     { label: 'Apri user.js', onClick: () => openPathSafe(profilePath ? `${profilePath}\\user.js` : '') },
     { label: 'Betterfox GitHub', onClick: () => window.bf.openUrl('https://github.com/yokoffing/Betterfox') },
     { label: 'Release Betterfox', onClick: () => window.bf.openUrl('https://github.com/yokoffing/Betterfox/releases') },
     { label: 'Changelog Betterfox', onClick: () => window.bf.openUrl('https://github.com/yokoffing/Betterfox/blob/main/CHANGELOG.md') },
+    { label: 'Cartella backup', onClick: () => openPathSafe(backupPath) },
+    { label: 'Apri profilo', onClick: () => openPathSafe(profilePath) },
   ];
 
   return (
@@ -182,13 +182,27 @@ function App() {
           <div className="eyebrow">Betterfox companion</div>
           <h1>{heroMeta.title}</h1>
           <p className="muted">{heroMeta.subtitle}</p>
+          <div className="hero-tags">
+            <span className="chip">Backup automatico</span>
+            <span className="chip">Tema sistema</span>
+            <span className="chip">Log chiari</span>
+          </div>
           <div className="hero-actions">
             <button className="btn primary" onClick={runUpdate}>Aggiorna ora</button>
-            <button className="btn ghost" onClick={() => window.bf.openUrl('https://github.com/yokoffing/Betterfox')}>Repo Betterfox</button>
+            <button className="btn ghost" onClick={runBackup}>Solo backup</button>
+            <button className="btn ghost" onClick={() => window.bf.openUrl('https://github.com/yokoffing/Betterfox/releases')}>Release Betterfox</button>
           </div>
         </div>
         <div className="hero-panel">
-          <div className="status-chip large">{status}</div>
+          <div className="status-stack">
+            <div className="status-chip large">{status}</div>
+            <div className="progress subtle mini">
+              <div className="bar" style={{ width: `${Math.min(progress, 100)}%` }}></div>
+            </div>
+            <div className="micro muted">
+              {profilePath ? 'Profilo selezionato' : 'Profilo non impostato'} | {backupPath ? 'Backup configurato' : 'Backup mancante'}
+            </div>
+          </div>
           <div className="theme-toggle">
             <span>Tema</span>
             <div className="toggle-buttons">
@@ -196,6 +210,10 @@ function App() {
               <button className={theme === 'light' ? 'active' : ''} onClick={() => setTheme('light')}>Light</button>
               <button className={theme === 'dark' ? 'active' : ''} onClick={() => setTheme('dark')}>Dark</button>
             </div>
+          </div>
+          <div className="hero-links">
+            <button className="btn ghost small" onClick={() => openPathSafe(profilePath)}>Apri profilo</button>
+            <button className="btn ghost small" onClick={() => openPathSafe(backupPath)}>Apri backup</button>
           </div>
         </div>
       </header>
@@ -209,10 +227,11 @@ function App() {
         </div>
       </section>
 
-      <main className="grid">
-        <section className="card actions">
-          <div className="card-title">Azioni rapide</div>
-          <div className="actions-row">
+      <main className="grid layout">
+        <section className="card form">
+          <div className="card-title">Percorsi e update</div>
+          <p className="muted small">Imposta profilo, cartella backup e lancia update con un click.</p>
+          <div className="actions-row primary">
             {quickActions.map((a) => (
               <button
                 key={a.label}
@@ -223,14 +242,6 @@ function App() {
               </button>
             ))}
           </div>
-          <div className="progress subtle">
-            <div className="bar" style={{ width: `${progress}%` }}></div>
-          </div>
-          <div className="hint muted">Suggerimento: usa “Aggiorna Betterfox” con backup automatico attivo.</div>
-        </section>
-
-        <section className="card form">
-          <div className="card-title">Percorsi e backup</div>
           <div className="form-row">
             <label>Profilo Firefox</label>
             <div className="field">
@@ -265,7 +276,7 @@ function App() {
               <button className="btn ghost" onClick={chooseBackupDir}>Scegli</button>
             </div>
           </div>
-          <div className="form-row two">
+          <div className="form-row two compact-pair">
             <div>
               <label>Retention (giorni)</label>
               <input type="number" min={7} max={120} value={retention} onChange={(e) => setRetention(Number(e.target.value))} />
@@ -279,21 +290,15 @@ function App() {
         </section>
 
         <section className="card log">
-          <div className="card-title">Log</div>
+          <div className="card-title">Log e link rapidi</div>
           <div className="log-box">
             {log.length === 0 ? <div className="muted">Nessun log</div> : log.map((item, idx) => <div key={idx}>{item}</div>)}
           </div>
           <div className="actions-row utility">
             <button className="btn ghost small" onClick={() => setLog([])}>Pulisci log</button>
-            <button className="btn ghost small" onClick={() => openPathSafe(backupPath)}>Apri backup</button>
-            <button className="btn ghost small" onClick={() => openPathSafe(profilePath)}>Apri profilo</button>
-            <button className="btn ghost small" onClick={() => window.bf.openUrl('https://github.com/yokoffing/Betterfox')}>GitHub</button>
+            <button className="btn ghost small" onClick={() => refreshVersions()}>Ricarica versioni</button>
           </div>
-        </section>
-
-        <section className="card links">
-          <div className="card-title">Link veloci</div>
-          <div className="links-grid">
+          <div className="links-grid compact">
             {links.map((l) => (
               <button key={l.label} className="btn ghost small" onClick={l.onClick}>{l.label}</button>
             ))}
