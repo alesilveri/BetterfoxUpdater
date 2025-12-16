@@ -1,5 +1,13 @@
 # Betterfox Updater - Changelog
 
+## 0.1.0 (Electron)
+- Nuova app Electron (React + Vite) con tema System/Light/Dark e palette dark pi├╣ profonda.
+- Layout compatto: hero con status, azioni rapide, percorsi/backup essenziali, log e link rapidi senza spazi vuoti.
+- Fetch Betterfox robusto (user agent, ultima data commit GitHub) e write user.js con versione aggiornata.
+- Icona app dedicata (BrowserWindow, build electron-builder) e banner per la repo.
+- README aggiornato: Electron come percorso principale, Python segnato come legacy.
+- Cleanup repo e .gitignore per output Node/Electron.
+
 ## 4.2.0
 - UI rinfrescata con hero card, badge di stato, pulsanti rapidi (cartella dati, release, changelog, repo Betterfox).
 - Sezione rete dedicata: proxy configurabile, timeout e tentativi con applicazione live e test download.

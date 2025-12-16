@@ -2,7 +2,7 @@
 
 ![banner](app-electron/public/banner.svg)
 
-App desktop (Electron + React) per tenere `user.js` di Betterfox sempre allineato: UI compatta, backup sicuri, percorsi chiari. Tema System/Light/Dark.
+App desktop (Electron + React) per tenere `user.js` di Betterfox sempre allineato: UI compatta, backup sicuri, percorsi chiari. Tema System/Light/Dark. Icona app inclusa (Start menu/Taskbar/Tray).
 
 ## Cosa c’è dentro
 - Controllo versioni: locale, remoto e ultimo commit Betterfox.
@@ -21,6 +21,11 @@ cd app-electron
 npm run build
 ```
 Trovi i binari in `app-electron/release/` (configurato con electron-builder).
+
+## Versioni e release
+- Versione Electron corrente: `0.1.0` (vedi `CHANGELOG.md`).
+- Usa `npm version <patch|minor|major>` per bump coerente, poi `npm run build` e `git push --tags`.
+- Il canale Python (`app/`) è legacy: tenuto per riferimento, sviluppo attivo solo su Electron.
 
 ## Note
 - Richiede Firefox chiuso per copiare/scrivere `user.js`.

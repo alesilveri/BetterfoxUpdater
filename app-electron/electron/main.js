@@ -8,6 +8,8 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const isDev = process.env.NODE_ENV === "development";
 const USERJS_URL = "https://raw.githubusercontent.com/yokoffing/Betterfox/main/user.js";
 const COMMITS_URL = "https://api.github.com/repos/yokoffing/Betterfox/commits?path=user.js&per_page=1";
+const APP_ID = "com.betterfox.updater";
+const ICON_PATH = join(__dirname, "icon.ico");
 
 function fetchText(url) {
   return new Promise((resolve, reject) => {
@@ -100,6 +102,9 @@ async function getRemoteMeta() {
 }
 
 function createWindow() {
+  app.setName("Betterfox Updater");
+  app.setAppUserModelId(APP_ID);
+
   const win = new BrowserWindow({
     width: 1080,
     height: 720,
@@ -107,6 +112,7 @@ function createWindow() {
     minHeight: 640,
     title: "Betterfox Updater",
     backgroundColor: "#0c1116",
+    icon: ICON_PATH,
     webPreferences: {
       preload: join(__dirname, "preload.js"),
       contextIsolation: true,

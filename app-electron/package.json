@@ -1,7 +1,7 @@
 {
-  "name": "app-electron",
+  "name": "betterfox-updater",
   "private": true,
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Betterfox Updater - desktop app moderna con backup e update user.js",
   "author": "BetterfoxUpdater",
   "type": "module",
