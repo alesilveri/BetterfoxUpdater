@@ -1,10 +1,10 @@
 # Betterfox Updater - Changelog
 
 ## Unreleased
-- Nuovo logo minimal (fox) e banner coerente per repo/app (icone start/taskbar/tray).
+- Icona legacy Betterfox ripristinata (app/tray/build) e banner leggero che la mostra senza artefatti.
 - UI piu leggera: hero con stato+progress, azioni/percorsi compatti, log con link essenziali.
-- Tema System/Light/Dark ripulito; nome app allineato a “Betterfox Companion”.
-- Release pubblica sospesa finche l’app non parte senza schermo nero.
+- Tema System/Light/Dark ripulito; nome app allineato a "Betterfox Companion".
+- Release pubblica sospesa finche l'app non parte senza schermo nero.
 
 ## 1.0.1 (branding)
 - Icona app rinfrescata (mint scuro) e banner riallineato con CTA visibile.
