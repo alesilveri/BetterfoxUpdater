@@ -23,7 +23,7 @@ npm run build
 Trovi i binari in `app-electron/release/` (configurato con electron-builder).
 
 ## Versioni e release
-- Versione Electron corrente: `1.0.0` (vedi `CHANGELOG.md`).
+- Versione Electron corrente: `1.0.1` (vedi `CHANGELOG.md`).
 - Usa `npm version <patch|minor|major>` per bump coerente, poi `npm run build` e `git push --tags`.
 - Il canale Python (`app/`) è legacy: tenuto per riferimento, sviluppo attivo solo su Electron.
 

@@ -1,5 +1,10 @@
 # Betterfox Updater - Changelog
 
+## 1.0.1 (branding)
+- Icona app rifatta (mint scuro, più leggibile) e banner riallineato con CTA chiara.
+- Pulizia asset superflui e repo snellita (Python legacy archiviato).
+- Patch di versioning per rilasci futuri (1.0.1).
+
 ## 1.0.0 (Electron)
 - Nuova app Electron (React + Vite) con tema System/Light/Dark e palette dark pi├╣ profonda.
 - Layout compatto: hero con status, azioni rapide, percorsi/backup essenziali, log e link rapidi senza spazi vuoti.
