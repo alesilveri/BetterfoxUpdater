@@ -25,26 +25,25 @@
   <rect x="12" y="12" width="1176" height="336" rx="24" fill="url(#panel)" stroke="rgba(71,102,136,0.35)" stroke-width="2" />
   <rect width="1200" height="360" rx="26" fill="url(#halo)" />
 
-  <g opacity="0.3">
+  <g opacity="0.25">
     <circle cx="180" cy="90" r="120" fill="#1fbfa0" />
     <circle cx="1040" cy="280" r="170" fill="#1fbfa0" />
   </g>
 
-  <!-- Minimal fox mark -->
+  <!-- Minimal fox mark (no outer ring) -->
   <g transform="translate(860 70) scale(0.34)">
-    <circle cx="512" cy="512" r="420" fill="#0c141f" stroke="#1fbfa0" stroke-width="18" />
-    <polygon points="360,260 470,200 470,330" fill="#ff8c42" />
-    <polygon points="564,200 664,260 564,330" fill="#ff8c42" />
+    <polygon points="360,260 470,200 470,330" fill="#ff7f2f" />
+    <polygon points="564,200 664,260 564,330" fill="#ff7f2f" />
     <polygon points="380,360 640,360 510,620" fill="#ffb56a" />
-    <polygon points="410,340 510,320 610,340 510,520" fill="#ff8c42" />
+    <polygon points="410,340 510,320 610,340 510,520" fill="#ff9a45" />
     <polygon points="470,420 550,420 510,500" fill="#ffe1c2" />
     <circle cx="470" cy="420" r="12" fill="#0c141f" />
     <circle cx="550" cy="420" r="12" fill="#0c141f" />
-    <circle cx="512" cy="512" r="320" fill="none" stroke="#1fbfa0" stroke-width="26" stroke-dasharray="680 320" stroke-dashoffset="160" />
+    <path d="M240 520 C420 700 720 700 820 480" stroke="#1fbfa0" stroke-width="26" stroke-linecap="round" fill="none" />
   </g>
 
   <text x="240" y="120" fill="#2ed8b2" font-family="Inter, 'Segoe UI', sans-serif" font-size="18" font-weight="700" letter-spacing="0.4">Companion Betterfox</text>
-  <text x="240" y="162" fill="#f4f7fb" font-family="Inter, 'Segoe UI', sans-serif" font-size="46" font-weight="800">Betterfox Companion</text>
+  <text x="240" y="162" fill="#f4f7fb" font-family="Inter, 'Segoe UI', sans-serif" font-size="46" font-weight="800">Betterfox Updater</text>
   <text x="240" y="200" fill="#9cb2c9" font-family="Inter, 'Segoe UI', sans-serif" font-size="22" font-weight="500">Aggiorna user.js con backup chiari e zero fronzoli.</text>
 
   <g fill="none" stroke="#203045" stroke-width="1" stroke-opacity="0.4">

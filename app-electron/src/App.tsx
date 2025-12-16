@@ -36,7 +36,7 @@ function App() {
 
   const heroMeta = useMemo(
     () => ({
-      title: 'Betterfox Companion',
+      title: 'Betterfox Updater',
       subtitle: 'Aggiorna user.js con un click, backup sicuri e percorsi chiari.',
     }),
     []

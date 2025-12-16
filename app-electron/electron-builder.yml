@@ -1,5 +1,5 @@
-appId: com.betterfox.companion
-productName: Betterfox Companion
+appId: com.betterfox.updater
+productName: BetterfoxUpdater
 directories:
   output: release
   buildResources: electron
