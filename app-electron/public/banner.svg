@@ -1,24 +1,38 @@
 <svg width="1200" height="360" viewBox="0 0 1200 360" fill="none" xmlns="http://www.w3.org/2000/svg">
 <defs>
-  <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
-    <stop offset="0%" stop-color="#63e6c4" stop-opacity="0.28"/>
-    <stop offset="60%" stop-color="#2b384d" stop-opacity="0.35"/>
-    <stop offset="100%" stop-color="#0b0f16" stop-opacity="0.9"/>
+  <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#0b0f16"/>
+    <stop offset="100%" stop-color="#05080e"/>
   </linearGradient>
-  <linearGradient id="g2" x1="0" y1="0" x2="1" y2="1">
-    <stop offset="0%" stop-color="#52d8b3" stop-opacity="0.8"/>
-    <stop offset="100%" stop-color="#63e6c4" stop-opacity="0.15"/>
+  <linearGradient id="glow" x1="0" y1="0" x2="1" y2="1">
+    <stop offset="0%" stop-color="#63e6c4" stop-opacity="0.25"/>
+    <stop offset="60%" stop-color="#304056" stop-opacity="0.4"/>
+    <stop offset="100%" stop-color="#0b0f16" stop-opacity="0.8"/>
   </linearGradient>
 </defs>
-<rect width="1200" height="360" rx="28" fill="#05080E"/>
-<rect x="10" y="10" width="1180" height="340" rx="24" fill="url(#g1)" stroke="rgba(87,116,150,0.35)" stroke-width="2"/>
-<circle cx="180" cy="90" r="110" fill="url(#g2)" opacity="0.35"/>
-<circle cx="1020" cy="260" r="140" fill="url(#g2)" opacity="0.25"/>
-<text x="120" y="165" fill="#f4f7fb" font-family="Inter, 'Segoe UI', sans-serif" font-size="48" font-weight="800">Betterfox Updater</text>
-<text x="120" y="210" fill="#8ea2bb" font-family="Inter, 'Segoe UI', sans-serif" font-size="22" font-weight="500">Aggiorna user.js in un click, con backup sicuri e percorsi chiari.</text>
-<rect x="120" y="240" width="280" height="46" rx="12" fill="#63e6c4"/>
-<text x="145" y="270" fill="#07100d" font-family="Inter, 'Segoe UI', sans-serif" font-size="18" font-weight="800">Aggiorna Betterfox</text>
-<rect x="420" y="240" width="260" height="46" rx="12" fill="rgba(99,230,196,0.15)" stroke="#63e6c4" stroke-width="1.5"/>
-<text x="440" y="270" fill="#cde7df" font-family="Inter, 'Segoe UI', sans-serif" font-size="18" font-weight="700">Backup profilo sicuro</text>
-<text x="120" y="120" fill="#63e6c4" font-family="Inter, 'Segoe UI', sans-serif" font-size="18" font-weight="700">Companion per Betterfox</text>
+<rect width="1200" height="360" rx="26" fill="url(#bg)"/>
+<rect x="12" y="12" width="1176" height="336" rx="24" fill="url(#glow)" stroke="rgba(90,118,148,0.35)" stroke-width="2"/>
+<circle cx="190" cy="90" r="120" fill="#63e6c4" fill-opacity="0.12"/>
+<circle cx="1020" cy="280" r="150" fill="#63e6c4" fill-opacity="0.10"/>
+
+<!-- Logo -->
+<g transform="translate(76 82) scale(0.9)">
+  <circle cx="120" cy="120" r="110" fill="#212d3d"/>
+  <circle cx="120" cy="120" r="88" fill="#0b0f16"/>
+  <path d="M165 55 C190 80 205 115 195 150 C185 185 150 210 115 205 L145 165 L135 145 L175 115 Z" fill="#63e6c4"/>
+  <circle cx="120" cy="110" r="55" fill="#3fcfa9"/>
+  <polygon points="102,82 120,58 126,88" fill="#63e6c4"/>
+  <polygon points="136,70 152,50 156,80" fill="#63e6c4"/>
+  <path d="M128 118 A24 24 0 0 1 148 132 Q140 140 130 136 Z" fill="#0b0f16"/>
+  <circle cx="120" cy="120" r="78" stroke="#63e6c4" stroke-opacity="0.4" stroke-width="4" fill="none"/>
+</g>
+
+<text x="260" y="150" fill="#f4f7fb" font-family="Inter, 'Segoe UI', sans-serif" font-size="48" font-weight="800">Betterfox Updater</text>
+<text x="260" y="195" fill="#8ea2bb" font-family="Inter, 'Segoe UI', sans-serif" font-size="22" font-weight="500">Aggiorna user.js in un click, con backup sicuri e percorsi chiari.</text>
+
+<rect x="260" y="230" width="260" height="48" rx="14" fill="#63e6c4"/>
+<text x="290" y="262" fill="#08100d" font-family="Inter, 'Segoe UI', sans-serif" font-size="18" font-weight="800">Scarica l'ultima release</text>
+<rect x="540" y="230" width="260" height="48" rx="14" fill="rgba(99,230,196,0.12)" stroke="#63e6c4" stroke-width="1.4"/>
+<text x="565" y="262" fill="#cde7df" font-family="Inter, 'Segoe UI', sans-serif" font-size="18" font-weight="700">Backup profilo sicuro</text>
+<text x="260" y="118" fill="#63e6c4" font-family="Inter, 'Segoe UI', sans-serif" font-size="18" font-weight="700">Companion per Betterfox</text>
 </svg>
