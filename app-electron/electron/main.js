@@ -1,4 +1,4 @@
-import { app, BrowserWindow, ipcMain, dialog, shell } from "electron";
+import { app, BrowserWindow, ipcMain, dialog, shell, Tray, Menu } from "electron";
 import fs from "fs";
 import { join, dirname } from "path";
 import { fileURLToPath } from "url";
@@ -119,6 +119,17 @@ function createWindow() {
       nodeIntegration: false,
     },
   });
+
+  // Tray per accesso rapido
+  const tray = new Tray(ICON_PATH);
+  const menu = Menu.buildFromTemplate([
+    { label: "Mostra finestra", click: () => win.show() },
+    { type: "separator" },
+    { label: "Esci", click: () => app.quit() },
+  ]);
+  tray.setToolTip("Betterfox Updater");
+  tray.setContextMenu(menu);
+  tray.on("click", () => win.show());
 
   if (isDev) {
     win.loadURL("http://localhost:5173/");

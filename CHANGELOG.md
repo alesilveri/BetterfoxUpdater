@@ -1,6 +1,6 @@
 # Betterfox Updater - Changelog
 
-## 0.1.0 (Electron)
+## 1.0.0 (Electron)
 - Nuova app Electron (React + Vite) con tema System/Light/Dark e palette dark pi├╣ profonda.
 - Layout compatto: hero con status, azioni rapide, percorsi/backup essenziali, log e link rapidi senza spazi vuoti.
 - Fetch Betterfox robusto (user agent, ultima data commit GitHub) e write user.js con versione aggiornata.
