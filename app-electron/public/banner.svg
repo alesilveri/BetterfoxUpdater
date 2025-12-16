@@ -5,8 +5,8 @@
       <stop offset="100%" stop-color="#0c1524" />
     </linearGradient>
     <linearGradient id="panel" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="rgba(31,191,160,0.14)" />
-      <stop offset="100%" stop-color="rgba(12,19,32,0.94)" />
+      <stop offset="0%" stop-color="rgba(31,191,160,0.18)" />
+      <stop offset="100%" stop-color="rgba(12,19,32,0.92)" />
     </linearGradient>
     <linearGradient id="cta" x1="0" y1="0" x2="1" y2="1">
       <stop offset="0%" stop-color="#2ed8b2" />
@@ -26,36 +26,25 @@
   <rect width="1200" height="360" rx="26" fill="url(#halo)" />
 
   <g opacity="0.25">
-    <circle cx="180" cy="90" r="120" fill="#1fbfa0" />
-    <circle cx="1040" cy="280" r="170" fill="#1fbfa0" />
+    <circle cx="170" cy="90" r="110" fill="#1fbfa0" />
+    <circle cx="1040" cy="280" r="160" fill="#1fbfa0" />
   </g>
 
-  <!-- Minimal fox mark -->
-  <g transform="translate(840 70) scale(0.36)">
-    <polygon points="360,260 470,200 470,320" fill="#ff7a2f" />
-    <polygon points="564,200 664,260 564,320" fill="#ff7a2f" />
-    <polygon points="360,300 512,240 664,300 512,520" fill="#ff9a45" />
-    <polygon points="390,340 512,310 634,340 512,510" fill="#ffb970" />
-    <polygon points="452,380 572,380 512,470" fill="#ffe4c5" />
-    <circle cx="472" cy="380" r="12" fill="#0b121d" />
-    <circle cx="552" cy="380" r="12" fill="#0b121d" />
-    <ellipse cx="512" cy="448" rx="14" ry="10" fill="#0b121d" />
-    <path d="M220 520 C420 700 720 700 880 500" stroke="#1fbfa0" stroke-width="26" stroke-linecap="round" fill="none" />
-  </g>
+  <image href="icon.png" x="120" y="90" height="180" width="180" />
 
-  <text x="220" y="118" fill="#2ed8b2" font-family="Inter, 'Segoe UI', sans-serif" font-size="18" font-weight="700" letter-spacing="0.4">Companion Betterfox</text>
-  <text x="220" y="158" fill="#f4f7fb" font-family="Inter, 'Segoe UI', sans-serif" font-size="44" font-weight="800">Betterfox Updater</text>
-  <text x="220" y="194" fill="#9cb2c9" font-family="Inter, 'Segoe UI', sans-serif" font-size="21" font-weight="500">Aggiorna user.js con backup chiari e zero fronzoli.</text>
+  <text x="340" y="126" fill="#2ed8b2" font-family="Inter, 'Segoe UI', sans-serif" font-size="18" font-weight="700" letter-spacing="0.4">Companion Betterfox</text>
+  <text x="340" y="168" fill="#f4f7fb" font-family="Inter, 'Segoe UI', sans-serif" font-size="44" font-weight="800">Betterfox Updater</text>
+  <text x="340" y="204" fill="#9cb2c9" font-family="Inter, 'Segoe UI', sans-serif" font-size="21" font-weight="500">Aggiorna user.js con backup chiari e zero fronzoli.</text>
 
   <g fill="none" stroke="#203045" stroke-width="1" stroke-opacity="0.4">
-    <line x1="220" y1="216" x2="660" y2="216" />
+    <line x1="340" y1="226" x2="720" y2="226" />
   </g>
 
-  <rect x="220" y="232" width="236" height="48" rx="14" fill="url(#cta)" />
-  <text x="248" y="264" fill="#07100d" font-family="Inter, 'Segoe UI', sans-serif" font-size="18" font-weight="800">Scarica l'ultima build</text>
+  <rect x="340" y="242" width="236" height="48" rx="14" fill="url(#cta)" />
+  <text x="368" y="274" fill="#07100d" font-family="Inter, 'Segoe UI', sans-serif" font-size="18" font-weight="800">Scarica l'ultima build</text>
 
-  <rect x="480" y="232" width="236" height="48" rx="14" fill="url(#ghost)" stroke="#2ed8b2" stroke-width="1.2" />
-  <text x="508" y="264" fill="#cde7df" font-family="Inter, 'Segoe UI', sans-serif" font-size="18" font-weight="700">Backup profilo pronto</text>
+  <rect x="604" y="242" width="236" height="48" rx="14" fill="url(#ghost)" stroke="#2ed8b2" stroke-width="1.2" />
+  <text x="632" y="274" fill="#cde7df" font-family="Inter, 'Segoe UI', sans-serif" font-size="18" font-weight="700">Backup profilo pronto</text>
 
-  <text x="220" y="304" fill="#8ea2bb" font-family="Inter, 'Segoe UI', sans-serif" font-size="15" font-weight="600">Tema System/Light/Dark · Tray pronta · Log chiari · Niente funzioni superflue</text>
+  <text x="340" y="316" fill="#8ea2bb" font-family="Inter, 'Segoe UI', sans-serif" font-size="15" font-weight="600">Tema System/Light/Dark · Tray pronta · Log chiari · Niente funzioni superflue</text>
 </svg>
