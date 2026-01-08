@@ -1,33 +1,47 @@
 # Betterfox Updater
 
-![banner](app-electron/public/banner.svg)
+![Betterfox Updater banner](docs/assets/banner.svg)
 
-App desktop (Electron + React) per tenere `user.js` di Betterfox sempre allineato: UI compatta, backup sicuri, percorsi chiari. Tema System/Light/Dark, icona dedicata (Start menu/Taskbar/Tray) e banner aggiornato.
+![CI](https://github.com/alesilveri/BetterfoxUpdater/actions/workflows/lint.yml/badge.svg)
+![Windows Build](https://github.com/alesilveri/BetterfoxUpdater/actions/workflows/windows-build.yml/badge.svg)
+![Release](https://github.com/alesilveri/BetterfoxUpdater/actions/workflows/release.yml/badge.svg)
 
-## Cosa c'e dentro
-- Controllo versioni: locale, remoto e ultima data commit Betterfox.
-- Aggiorna `user.js` con backup automatico opzionale e retention giorni.
-- Rilevamento profili Firefox, scelta cartella backup, link rapidi a repo/changelog/release.
-- Tema System/Light/Dark, log leggibile, azioni rapide senza fronzoli.
+App Electron personale per allineare `user.js` di Betterfox con backup sicuri e percorso guidato.
 
-## Uso rapido
-1) `cd app-electron && npm install`  
-2) Dev: `npm run dev` (parte Vite + Electron)  
-3) In app: scegli profilo Firefox, cartella backup, premi **Aggiorna Betterfox**.  
+## Download (Releases)
+- Vai nelle Releases: trovi solo **draft** o **prerelease** (nessuna release finale automatica).
+
+## Come si usa (3 step)
+1) Seleziona il profilo Firefox.
+2) Imposta la cartella backup (consigliato).
+3) Esegui update e riavvia Firefox.
+
+## Dev (Electron)
+```bash
+cd app-electron
+npm ci
+npm run dev
+```
 
 ## Build
 ```bash
 cd app-electron
 npm run build
 ```
-Trovi i binari in `app-electron/release/` (configurato con electron-builder).
 
-## Versioni e release
-- Versione Electron corrente: `1.0.0` (vedi `CHANGELOG.md`).
-- Per ora niente release pubblica: testiamo in locale (`npm run dev` / `npm run build`) finche tutto gira senza schermo nero.
-- Il canale Python e legacy in `archive/python-legacy/` (tenuto solo come riferimento).
+## Release (draft)
+- Workflow manuale o tag `vX.Y.Z`.
+- La release viene creata **solo** come draft/prerelease e allega gli artifact Windows.
 
-## Note
-- Richiede Firefox chiuso per copiare/scrivere `user.js`.
-- I dati (config/log) sono gestiti da Electron; i backup restano dove li imposti tu.
-- Progetto personale: UI pensata per essere semplice, niente funzioni superflue. Titoli e testi sono chiari per chi non e tecnico.
+## Screenshot
+- In arrivo. Catturare uno screenshot reale in `docs/assets/screenshots/`.
+
+## Note importanti
+- Progetto principale: `app-electron/`.
+- Legacy Python archiviato in `archive/python-legacy/` (solo riferimento).
+
+## Disclaimer
+Betterfox Updater non e affiliato a Betterfox o Mozilla/Firefox.
+
+## License
+MIT
