@@ -3,6 +3,8 @@ import './theme.css';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
 type Stat = { label: string; value: string; tone?: 'ok' | 'warn' | 'err' };
+type StatusTone = 'ok' | 'warn' | 'err' | 'busy';
+type StatusState = { label: string; detail: string; tone: StatusTone };
 
 const STAT_TEMPLATE: Stat[] = [
   { label: 'Locale', value: 'n/d' },
@@ -11,7 +13,13 @@ const STAT_TEMPLATE: Stat[] = [
   { label: 'Firefox', value: 'n/d' },
 ];
 
-const formatErr = (err: unknown) => (err instanceof Error ? err.message : String(err));
+const DEFAULT_STATUS: StatusState = {
+  label: 'Pronto',
+  detail: 'Seleziona un profilo per iniziare.',
+  tone: 'ok',
+};
+
+const formatErr = (err: unknown) => (err instanceof Error ? err.message : 'Errore sconosciuto');
 
 function Pill({ stat }: { stat: Stat }) {
   return (
@@ -29,18 +37,26 @@ function App() {
   const [retention, setRetention] = useState(45);
   const [log, setLog] = useState<string[]>([]);
   const [progress, setProgress] = useState(0);
-  const [status, setStatus] = useState('Pronto');
+  const [status, setStatus] = useState<StatusState>(DEFAULT_STATUS);
   const [autoBackup, setAutoBackup] = useState(true);
   const [theme, setTheme] = useState<'light' | 'dark' | 'system'>('system');
   const [stats, setStats] = useState<Stat[]>(() => [...STAT_TEMPLATE]);
+  const [appVersion, setAppVersion] = useState('');
+  const [lastUpdateOk, setLastUpdateOk] = useState(false);
+  const [lastBackupOk, setLastBackupOk] = useState(false);
+  const [needsRestart, setNeedsRestart] = useState(false);
 
   const heroMeta = useMemo(
     () => ({
       title: 'Betterfox Updater',
-      subtitle: 'Aggiorna user.js con un click, backup sicuri e percorsi chiari.',
+      subtitle: 'Aggiorna user.js con backup sicuri e percorso guidato.',
     }),
     []
   );
+
+  const setStatusState = useCallback((label: string, detail: string, tone: StatusTone) => {
+    setStatus({ label, detail, tone });
+  }, []);
 
   const appendLog = (items: string | string[]) => {
     const entries = Array.isArray(items) ? items : [items];
@@ -60,6 +76,15 @@ function App() {
   }, [theme]);
 
   useEffect(() => {
+    window.bf.getVersion().then(setAppVersion).catch(() => {});
+  }, []);
+
+  useEffect(() => {
+    setLastUpdateOk(false);
+    setNeedsRestart(false);
+  }, [profilePath]);
+
+  useEffect(() => {
     if (theme !== 'system') return;
     const mql = window.matchMedia?.('(prefers-color-scheme: dark)');
     const onChange = () => {
@@ -76,12 +101,12 @@ function App() {
       setProfiles(found);
       if (!profilePath && found.length > 0) setProfilePath(found[0].path);
     } catch (err) {
-      appendLog(`[err] Profili: ${formatErr(err)}`);
+      appendLog(`Errore: impossibile leggere i profili (${formatErr(err)}).`);
     }
   }, [profilePath]);
 
   const refreshVersions = useCallback(async () => {
-    setStatus('Controllo versioni...');
+    setStatusState('In corso', 'Controllo versioni in corso.', 'busy');
     setProgress(22);
     try {
       const res = await window.bf.checkVersions(profilePath || undefined);
@@ -91,14 +116,14 @@ function App() {
         { label: 'GitHub', value: res.github, tone: res.github !== 'n/d' ? 'ok' : undefined },
         { label: 'Firefox', value: res.firefox },
       ]);
-      setStatus('Pronto');
+      setStatusState('Pronto', 'Versioni aggiornate.', 'ok');
     } catch (err) {
-      appendLog(`[err] Versioni: ${formatErr(err)}`);
-      setStatus('Errore versioni');
+      appendLog(`Errore: controllo versioni non riuscito (${formatErr(err)}).`);
+      setStatusState('Errore', 'Controllo versioni non riuscito.', 'err');
     } finally {
       setTimeout(() => setProgress(0), 700);
     }
-  }, [profilePath]);
+  }, [profilePath, setStatusState]);
 
   const chooseProfileDir = async () => {
     const dir = await window.bf.chooseDir();
@@ -112,48 +137,75 @@ function App() {
 
   const runBackup = async () => {
     if (!profilePath || !backupPath) {
-      appendLog('[err] Imposta profilo e cartella backup');
-      setStatus('Dati mancanti');
+      appendLog('Errore: seleziona profilo e cartella backup prima di continuare.');
+      setStatusState('Errore', 'Profilo o backup mancante.', 'err');
+      setLastBackupOk(false);
       return;
     }
-    setStatus('Backup in corso.');
+    setStatusState('In corso', 'Backup in esecuzione.', 'busy');
     setProgress(40);
     const res = await window.bf.backupProfile({ profilePath, destPath: backupPath, retentionDays: retention });
     appendLog(res.log);
-    setStatus(res.ok ? 'Backup completato' : 'Errore backup');
+    setLastBackupOk(res.ok);
+    setStatusState(res.ok ? 'Pronto' : 'Errore', res.ok ? 'Backup completato.' : 'Backup non riuscito.', res.ok ? 'ok' : 'err');
     setTimeout(() => setProgress(0), 700);
   };
 
   const runUpdate = async () => {
     if (!profilePath) {
-      appendLog('[err] Profilo non impostato');
-      setStatus('Dati mancanti');
+      appendLog('Errore: seleziona un profilo Firefox prima di aggiornare.');
+      setStatusState('Errore', 'Profilo non impostato.', 'err');
+      setLastUpdateOk(false);
       return;
     }
-    setStatus('Aggiornamento.');
+    setStatusState('In corso', 'Aggiornamento in corso.', 'busy');
     setProgress(28);
     if (autoBackup && backupPath) {
       const bk = await window.bf.backupProfile({ profilePath, destPath: backupPath, retentionDays: retention });
       appendLog(bk.log);
+      setLastBackupOk(bk.ok);
+      if (!bk.ok) appendLog('Attenzione: backup non riuscito, continuo con update.');
     } else if (autoBackup) {
-      appendLog('[warn] Backup saltato: cartella non configurata');
+      appendLog('Attenzione: backup saltato, cartella non configurata.');
     }
     const res = await window.bf.updateBetterfox({ profilePath });
     appendLog(res.log);
     if (res.version) {
       setStats((prev) => prev.map((s) => (s.label === 'Locale' ? { ...s, value: res.version! } : s)));
     }
-    setStatus(res.ok ? 'Aggiornato' : 'Errore update');
+    setLastUpdateOk(res.ok);
+    setNeedsRestart(res.ok);
+    setStatusState(
+      res.ok ? 'Pronto' : 'Errore',
+      res.ok ? 'Aggiornamento completato. Riavvia Firefox.' : 'Aggiornamento non riuscito.',
+      res.ok ? 'ok' : 'err'
+    );
     setTimeout(() => setProgress(0), 700);
   };
 
   const openPathSafe = async (path?: string) => {
     if (!path) {
-      appendLog('[err] Percorso non disponibile');
+      appendLog('Errore: percorso non disponibile.');
       return;
     }
     await window.bf.openPath(path);
   };
+
+  const markRestarted = () => {
+    setNeedsRestart(false);
+    appendLog('OK: Firefox riavviato.');
+    setStatusState('Pronto', 'Firefox riavviato.', 'ok');
+  };
+
+  const steps = useMemo(() => {
+    const backupReady = !!backupPath || !autoBackup;
+    return [
+      { label: 'Seleziona profilo Firefox', done: !!profilePath },
+      { label: autoBackup ? 'Imposta cartella backup' : 'Backup opzionale disattivato', done: backupReady },
+      { label: 'Esegui update', done: lastUpdateOk },
+      { label: 'Riavvia Firefox', done: lastUpdateOk && !needsRestart },
+    ];
+  }, [profilePath, backupPath, autoBackup, lastUpdateOk, needsRestart]);
 
   useEffect(() => {
     loadProfiles();
@@ -180,7 +232,10 @@ function App() {
       <header className="hero">
         <div className="hero-text">
           <div className="eyebrow">Betterfox companion</div>
-          <h1>{heroMeta.title}</h1>
+          <div className="title-row">
+            <h1>{heroMeta.title}</h1>
+            {appVersion ? <span className="version-pill">v{appVersion}</span> : null}
+          </div>
           <p className="muted">{heroMeta.subtitle}</p>
           <div className="hero-tags">
             <span className="chip">Backup automatico</span>
@@ -195,13 +250,17 @@ function App() {
         </div>
         <div className="hero-panel">
           <div className="status-stack">
-            <div className="status-chip large">{status}</div>
+            <div className={`status-chip large ${status.tone}`}>{status.label}</div>
+            <div className="status-detail muted small">{status.detail}</div>
             <div className="progress subtle mini">
               <div className="bar" style={{ width: `${Math.min(progress, 100)}%` }}></div>
             </div>
             <div className="micro muted">
-              {profilePath ? 'Profilo selezionato' : 'Profilo non impostato'} | {backupPath ? 'Backup configurato' : 'Backup mancante'}
+              Profilo: {profilePath ? 'selezionato' : 'non impostato'} | Backup: {backupPath ? 'configurato' : 'mancante'}
             </div>
+            {needsRestart ? (
+              <button className="btn ghost small" onClick={markRestarted}>Ho riavviato Firefox</button>
+            ) : null}
           </div>
           <div className="theme-toggle">
             <span>Tema</span>
@@ -231,6 +290,14 @@ function App() {
         <section className="card form">
           <div className="card-title">Percorsi e update</div>
           <p className="muted small">Imposta profilo, cartella backup e lancia update con un click.</p>
+          <div className="step-list">
+            {steps.map((step, idx) => (
+              <div key={step.label} className={`step ${step.done ? 'done' : ''}`}>
+                <span className="step-index">{idx + 1}</span>
+                <span>{step.label}</span>
+              </div>
+            ))}
+          </div>
           <div className="actions-row primary">
             {quickActions.map((a) => (
               <button

@@ -1,0 +1,37 @@
+name: Bug report
+description: Segnala un problema con Betterfox Updater
+labels: [bug]
+body:
+  - type: textarea
+    id: summary
+    attributes:
+      label: Descrizione
+      description: Cosa succede e cosa ti aspettavi.
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Passi per riprodurre
+      description: Elenca i passi esatti.
+      placeholder: |
+        1. ...
+        2. ...
+        3. ...
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Versione app
+      description: Visibile in alto nell'app (es. 1.0.0).
+  - type: input
+    id: os
+    attributes:
+      label: Sistema operativo
+      placeholder: Windows 11
+  - type: textarea
+    id: logs
+    attributes:
+      label: Log o screenshot
+      description: Incolla log o allega screenshot.

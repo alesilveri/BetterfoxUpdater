@@ -1,5 +1,5 @@
 appId: com.betterfox.updater
-productName: BetterfoxUpdater
+productName: Betterfox Updater
 directories:
   output: release
   buildResources: electron
@@ -11,4 +11,4 @@ win:
   target:
     - nsis
     - portable
-  icon: electron/icon.ico
+  icon: electron/icon.png

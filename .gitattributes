@@ -1,0 +1,6 @@
+# Mark legacy sources as vendored so Linguist does not count them
+archive/legacy/** linguist-vendored
+archive/python-legacy/** linguist-vendored
+
+# Keep archive out of diffs by default
+archive/** -diff

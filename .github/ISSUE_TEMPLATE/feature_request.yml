@@ -1,0 +1,21 @@
+name: Feature request
+description: Proponi un miglioramento per Betterfox Updater
+labels: [enhancement]
+body:
+  - type: textarea
+    id: idea
+    attributes:
+      label: Descrizione
+      description: Cosa vorresti aggiungere o migliorare.
+    validations:
+      required: true
+  - type: textarea
+    id: value
+    attributes:
+      label: Perche e utile
+      description: Spiega il valore per l'utente.
+  - type: textarea
+    id: notes
+    attributes:
+      label: Note extra
+      description: Link, mockup o alternative.
