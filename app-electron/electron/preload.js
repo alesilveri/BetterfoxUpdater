@@ -8,4 +8,5 @@ contextBridge.exposeInMainWorld("bf", {
   chooseDir: () => ipcRenderer.invoke("bf:chooseDir"),
   openPath: (path) => ipcRenderer.invoke("bf:openPath", path),
   openUrl: (url) => ipcRenderer.invoke("bf:openUrl", url),
+  getVersion: () => ipcRenderer.invoke("bf:getVersion"),
 });
