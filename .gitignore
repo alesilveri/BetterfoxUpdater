@@ -3,6 +3,7 @@ __pycache__/
 *.py[cod]
 *.pyo
 venv/
+.venv/
 
 # PyInstaller outputs
 build_app/
@@ -11,20 +12,31 @@ release_app/
 *.spec
 
 # Node / Electron
-app-electron/node_modules/
+node_modules/
+**/node_modules/
 app-electron/dist/
 app-electron/release/
+app-electron/out/
+app-electron/build/
 app-electron/.vite/
+app-electron/.electron-builder/
+app-electron/.cache/
 app-electron/*.log
+app-electron/*.log.*
 
 # Logs / runtime
 *.log
 error.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
 # OS noise
 .DS_Store
 Thumbs.db
+
+# Misc
 release_BetterfoxUpdater/
 config.ini
 nuitka-crash-report.xml
-resources/betterfox.ico

@@ -146,11 +146,12 @@ ipcMain.handle("bf:check", async (_evt, profilePath) => {
 });
 
 ipcMain.handle("bf:listProfiles", () => listFirefoxProfiles());
+ipcMain.handle("bf:getVersion", () => app.getVersion());
 
 ipcMain.handle("bf:update", async (_evt, payload) => {
   const { profilePath } = payload || {};
   if (!profilePath) {
-    return { ok: false, log: ["[err] Profilo non impostato"] };
+    return { ok: false, log: ["Errore: profilo Firefox non impostato."] };
   }
   try {
     const meta = await getRemoteMeta();
@@ -158,18 +159,19 @@ ipcMain.handle("bf:update", async (_evt, payload) => {
     fs.writeFileSync(join(profilePath, "user.js"), meta.content, "utf-8");
     return {
       ok: true,
-      log: [`[ok] Betterfox aggiornato a ${meta.version}`],
+      log: [`OK: Betterfox aggiornato a ${meta.version}.`],
       version: getLocalVersion(profilePath),
     };
   } catch (err) {
-    return { ok: false, log: [`[err] Update: ${err.message}`] };
+    const message = err instanceof Error ? err.message : "Errore sconosciuto";
+    return { ok: false, log: [`Errore: update non riuscito (${message}).`] };
   }
 });
 
 ipcMain.handle("bf:backup", async (_evt, payload) => {
   const { profilePath, destPath, retentionDays = 60 } = payload || {};
   if (!profilePath || !destPath) {
-    return { ok: false, log: ["[err] Profilo o cartella backup mancante"] };
+    return { ok: false, log: ["Errore: profilo o cartella backup mancante."] };
   }
   try {
     if (!fs.existsSync(destPath)) fs.mkdirSync(destPath, { recursive: true });
@@ -186,9 +188,10 @@ ipcMain.handle("bf:backup", async (_evt, payload) => {
         fs.rmSync(full, { recursive: true, force: true });
       }
     }
-    return { ok: true, log: [`[ok] Backup creato: ${targetDir}`] };
+    return { ok: true, log: [`OK: backup creato in ${targetDir}.`] };
   } catch (err) {
-    return { ok: false, log: [`[err] Backup: ${err.message}`] };
+    const message = err instanceof Error ? err.message : "Errore sconosciuto";
+    return { ok: false, log: [`Errore: backup non riuscito (${message}).`] };
   }
 });
 

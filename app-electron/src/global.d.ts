@@ -10,6 +10,7 @@ declare global {
       chooseDir: () => Promise<string | null>;
       openPath: (path: string) => Promise<boolean>;
       openUrl: (url: string) => Promise<boolean>;
+      getVersion: () => Promise<string>;
     };
   }
 }
