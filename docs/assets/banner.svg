@@ -1,0 +1,54 @@
+<svg width="1200" height="360" viewBox="0 0 1200 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#071019" />
+      <stop offset="100%" stop-color="#0b1826" />
+    </linearGradient>
+    <linearGradient id="card" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="rgba(63, 220, 186, 0.12)" />
+      <stop offset="100%" stop-color="rgba(12, 21, 34, 0.88)" />
+    </linearGradient>
+    <linearGradient id="cta" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#2fe0b5" />
+      <stop offset="100%" stop-color="#1fb190" />
+    </linearGradient>
+    <linearGradient id="ghost" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="rgba(47, 224, 181, 0.08)" />
+      <stop offset="100%" stop-color="rgba(47, 224, 181, 0.24)" />
+    </linearGradient>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse">
+      <path d="M 0 32 L 32 32 32 0" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="360" rx="26" fill="url(#bg)" />
+  <rect width="1200" height="360" rx="26" fill="url(#grid)" />
+
+  <rect x="22" y="22" width="1156" height="316" rx="22" fill="url(#card)" stroke="rgba(88,124,158,0.3)" stroke-width="1.6" />
+
+  <g opacity="0.18">
+    <circle cx="160" cy="90" r="110" fill="#23cba4" />
+    <circle cx="1040" cy="280" r="150" fill="#1fa388" />
+  </g>
+
+  <image href="./icon.png" x="76" y="84" width="148" height="148" preserveAspectRatio="xMidYMid meet" />
+
+  <g>
+    <text x="260" y="124" fill="#2fe0b5" font-family="Inter, 'Segoe UI', sans-serif" font-size="18" font-weight="700" letter-spacing="0.5">Companion Betterfox</text>
+    <text x="260" y="170" fill="#f4f7fb" font-family="Inter, 'Segoe UI', sans-serif" font-size="44" font-weight="800">Betterfox Updater</text>
+    <text x="260" y="206" fill="#9cb2c9" font-family="Inter, 'Segoe UI', sans-serif" font-size="20" font-weight="500">Aggiorna user.js con backup chiari, tema System/Light/Dark e log leggibili.</text>
+
+    <g font-family="Inter, 'Segoe UI', sans-serif" font-size="15" font-weight="600" fill="#8ea2bb">
+      <text x="260" y="238">- Backup automatico opzionale</text>
+      <text x="260" y="260">- Profili Firefox rilevati e apribili</text>
+      <text x="520" y="238">- Tray icona dedicata</text>
+      <text x="520" y="260">- Link rapidi a repo / changelog Betterfox</text>
+    </g>
+  </g>
+
+  <rect x="260" y="284" width="220" height="52" rx="14" fill="url(#cta)" />
+  <text x="288" y="316" fill="#06100d" font-family="Inter, 'Segoe UI', sans-serif" font-size="18" font-weight="800">Apri Betterfox Updater</text>
+
+  <rect x="494" y="284" width="220" height="52" rx="14" fill="url(#ghost)" stroke="#2fe0b5" stroke-width="1.2" />
+  <text x="522" y="316" fill="#d0ebe4" font-family="Inter, 'Segoe UI', sans-serif" font-size="18" font-weight="700">Backup profilo pronto</text>
+</svg>
