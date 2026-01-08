@@ -1,19 +1,19 @@
 # Stato progetto
 
-Stato: repo riallineata a Electron con documentazione e UI aggiornate; lint/build OK su branch `chore/session-2026-01-08`.
+Stato: main unica e allineata a origin; working copy pulita e senza artefatti build.
 
 Fatto:
-- Creati `docs/` + `AGENTS.md`, aggiunti asset base (banner/icon) e .editorconfig/.gitattributes/.gitignore aggiornati.
-- UI guidata con step, stati (Pronto/In corso/Errore), versione app reale e log piu chiari.
-- IPC aggiornato (getVersion, messaggi errori piu umani) e README/CHANGELOG riallineati.
-- Test eseguiti: `npm run lint`, `npm run build`.
+- Unificati branch e mantenuta solo `main` (local + remote).
+- Pulizia repo: rimossi artifact ignorati (dist/release/node_modules).
+- UI guidata con step/stati + version pill e IPC `getVersion`.
+- README/CHANGELOG/AGENTS riallineati con disclaimer e flusso release draft.
 
 Problemi/Blocchi:
-- Screenshot reale mancante in `docs/assets/screenshots/` (da catturare manualmente).
+- Screenshot reale mancante in `docs/assets/screenshots/`.
 
 Decisioni:
 - Release solo draft/prerelease (mai finali automatiche).
 
 Next:
-- Aggiungere screenshot reale app e aggiornare README.
-- Verificare UX in-app su profili reali e backup con retention.
+- Aggiungere screenshot reale e aggiornare README.
+- Verifica manuale UX su profili reali.
