@@ -1,12 +1,11 @@
 # Stato progetto
 
-Stato: main unica e allineata a origin; working copy pulita e senza artefatti build.
+Stato: repo ripulita e allineata; identita (banner/icona) coerente tra docs e app.
 
 Fatto:
-- Unificati branch e mantenuta solo `main` (local + remote).
-- Pulizia repo: rimossi artifact ignorati (dist/release/node_modules).
-- UI guidata con step/stati + version pill e IPC `getVersion`.
-- README/CHANGELOG/AGENTS riallineati con disclaimer e flusso release draft.
+- Pulizia root: note Python legacy spostate in `archive/python-legacy/`.
+- Banner unificato (docs/assets e app-electron/public).
+- Unica branch `main` allineata a `origin/main`.
 
 Problemi/Blocchi:
 - Screenshot reale mancante in `docs/assets/screenshots/`.
